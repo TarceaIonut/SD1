@@ -1,0 +1,31 @@
+﻿@model List<Pair<Doctor,Account>>
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<!DOCTYPE html>
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="doctor table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Speciality</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var doctor in Model)
+        {
+            <tr>
+                <td>@doctor.Second.Username</td>
+                <th>@doctor.First.Email</th>
+                <td>@doctor.First.Specialty</td>
+            </tr>
+        }
+    
+    </tbody>
+    
+</table>

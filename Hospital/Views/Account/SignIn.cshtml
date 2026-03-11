@@ -1,0 +1,26 @@
+﻿@model Hospital.Models.ViewModels.SignInModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<!DOCTYPE html>
+<h1>@ViewData["Title"]</h1>
+<html lang="en">
+<body>
+
+<div class="login-card">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-controller="Account" asp-action="SignIn" method="post">
+        <div class="input">
+            <label asp-for="@Model.name">Username</label>
+            <input asp-for="@Model.name" placeholder="Enter username"/>
+        </div>
+        <div class="input">
+            <label asp-for="@Model.password">Password</label>
+            <input asp-for="@Model.password" placeholder="Enter password"/>
+        </div>
+        <button type="submit" class="button-Sign-In">Sign In</button>
+    </form>
+</div>
+</body>
+</html>
