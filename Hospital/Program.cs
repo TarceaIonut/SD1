@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Hospital.Controllers;
 using Hospital.Repositories;
+using Hospital.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<DoctorRepository>();
 builder.Services.AddScoped<AccountRepository>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<DoctorsService>();
 builder.Services.AddScoped<AppDbContext>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

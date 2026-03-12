@@ -1,0 +1,31 @@
+﻿@model List<Pair<Person,Account>>
+
+@{
+    ViewData["Title"] = "Accounts";
+}
+
+<!DOCTYPE html>
+
+<h1>@ViewData["Title"]</h1>
+<div asp-validation-summary="All" class="text-danger"></div>
+<table class="accounts table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var doctor in Model)
+    {
+        <tr>
+            <td>@doctor.Second.Username</td>
+            <th>@doctor.First.Email</th>
+            <td>@doctor.First.Role.ToString()</td>
+        </tr>
+    }
+    
+    </tbody>
+    
+</table>

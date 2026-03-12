@@ -13,6 +13,11 @@ namespace Hospital.Repositories {
             if  (a == null) return null;
             return new Pair<Person, Account>(a.person , a);
         }
+
+        public List<Pair<Person, Account>> FindAll() {
+            return _context.Accounts.Include(a => a.person).ToList().
+                Select(a => new Pair<Person, Account>(a.person, a)).ToList();
+        }
         public bool PersonExists(string email) {
             return _context.Persons.FirstOrDefault(a => a.Email == email) != null;
         }
@@ -32,6 +37,11 @@ namespace Hospital.Repositories {
             int nr = _context.SaveChanges();
             return nr == 2;
         }
-
+        public bool deleteAccountById(int id) {
+            var v = _context.Accounts.Find(id);
+            if (v == null) return false;
+            _context.Accounts.Remove(v);
+            return _context.SaveChanges() > 0;
+        }
     }
 }

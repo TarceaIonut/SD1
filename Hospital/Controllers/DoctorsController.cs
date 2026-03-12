@@ -1,23 +1,18 @@
 ﻿using Hospital.Repositories;
+using Hospital.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.Controllers;
 
 public class DoctorsController : Controller
 {
-    private readonly DoctorRepository repository;
+    private readonly DoctorsService _service;
 
-    public DoctorsController(DoctorRepository repository)
+    public DoctorsController(DoctorsService service)
     {
-        this.repository = repository;
+        this._service = service;
     }
-    public IActionResult Doctors()
-    {
-        return View(repository.GetAllAccountInfo());
-    }
-
-    public IActionResult DoctorDetails()
-    {
-        return View(repository.GetAllAccountInfo());
+    public IActionResult Doctors() {
+        return View(_service.GetAllAccountInfo());
     }
 }
