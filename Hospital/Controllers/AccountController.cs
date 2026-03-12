@@ -46,7 +46,7 @@ public class AccountController : Controller {
             HttpContext.Session.SetString("UserEmail", person.First.Email);
             HttpContext.Session.SetString("UserRole", person.First.Role.ToString());
             var account = person.Second;
-            ModelState.AddModelError("",  account + " " + account.person + "\n");
+            //ModelState.AddModelError("",  account + " " + account.person + "\n");
         }
         return View(model);
     }

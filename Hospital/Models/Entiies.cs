@@ -22,6 +22,7 @@ namespace Hospital.Models
         }
     }
     public class Doctor : Person, IDoctor {
+        public List<DoctorCheckups> DoctorCheckups { get; set; }
         protected Doctor() {}
         public Doctor(string email, UserRole role, string? specialty) {
             base.SetPerson(email, role);
@@ -30,16 +31,15 @@ namespace Hospital.Models
         public string Specialty { get; set; }
     }
 
-    public class Admin : Person, IAdministrator
-    {
+    public class Admin : Person, IAdministrator {
         protected Admin() {}
         public Admin(string email, UserRole role) {
             base.SetPerson(email, role);
         }
     }
 
-    public class Patient : Person, IPatient
-    {
+    public class Patient : Person, IPatient {
+        public List<DoctorCheckups> DoctorCheckups { get; set; }
         protected Patient() {}
         public Patient(string email, UserRole role) {
             base.SetPerson(email, role);

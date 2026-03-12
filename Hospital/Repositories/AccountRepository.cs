@@ -43,5 +43,6 @@ namespace Hospital.Repositories {
             _context.Accounts.Remove(v);
             return _context.SaveChanges() > 0;
         }
+        
     }
 }

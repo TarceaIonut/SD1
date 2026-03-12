@@ -1,0 +1,65 @@
+﻿@model Hospital.Models.ViewModels.DoctorCheckupVewModel
+
+
+@{
+    ViewData["Title"] = "Checkups";
+}
+<!DOCTYPE html>
+
+<title>ViewData["Title"]</title>
+
+
+<div class="container-fluid">
+    <div class="row align-items-start">
+        <div class="col-md-5">
+            <table class="accounts table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Speciality</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (@Model.Doctors != null)
+                {
+                    @foreach (var doctor in @Model.Doctors)
+                    {
+                        <tr>
+                            <th>@doctor.Account?.Username</th>
+                            <th>@doctor.Email</th>
+                            <th>@doctor.Specialty</th>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="col-md-2 d-flex justify-content-center align-items-center mt-5">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <h1>Do be continued</h1>
+        </div>
+        <div class="col-md-5">
+            <table class="accounts table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var patient in @Model.Patients)
+                {
+                    <tr>
+                        <th>@patient.Account?.Username</th>
+                        <th>@patient.Email</th>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<table></table>

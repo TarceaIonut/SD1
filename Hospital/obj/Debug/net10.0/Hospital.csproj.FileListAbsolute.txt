@@ -211,3 +211,4 @@ C:\Users\Ionut\RiderProjects\WebApplication2\Hospital\bin\Debug\net10.0\ru\Micro
 C:\Users\Ionut\RiderProjects\WebApplication2\Hospital\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Ionut\RiderProjects\WebApplication2\Hospital\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Ionut\RiderProjects\WebApplication2\Hospital\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+C:\Users\Ionut\RiderProjects\WebApplication2\Hospital\obj\Debug\net10.0\compressed\v6kjb3yohd-{0}-f38n4r82wv-f38n4r82wv.gz
