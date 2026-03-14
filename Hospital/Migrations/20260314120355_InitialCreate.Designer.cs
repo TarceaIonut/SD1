@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260311110632_InitialCreate")]
+    [Migration("20260314120355_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,6 +42,27 @@ namespace Hospital.Migrations
                         .IsUnique();
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("Hospital.Models.DoctorCheckups", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("DoctorCheckups");
                 });
 
             modelBuilder.Entity("Hospital.Models.Person", b =>
@@ -128,10 +149,39 @@ namespace Hospital.Migrations
                     b.Navigation("person");
                 });
 
+            modelBuilder.Entity("Hospital.Models.DoctorCheckups", b =>
+                {
+                    b.HasOne("Hospital.Models.Doctor", "Doctor")
+                        .WithMany("DoctorCheckups")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hospital.Models.Patient", "Patient")
+                        .WithMany("DoctorCheckups")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("Hospital.Models.Person", b =>
                 {
                     b.Navigation("Account")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Hospital.Models.Doctor", b =>
+                {
+                    b.Navigation("DoctorCheckups");
+                });
+
+            modelBuilder.Entity("Hospital.Models.Patient", b =>
+                {
+                    b.Navigation("DoctorCheckups");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,14 +23,26 @@ public class FunctionsRepository {
         return _context.Patients.Include(p => p.Account).
             FirstOrDefault(p => p.Email == email && p.Account.Username == username);
     }
-    public DoctorCheckups NewCheckup(DoctorCheckups doctorCheckups) => _context.DoctorCheckups.Add(doctorCheckups).Entity;
+
+    public DoctorCheckups? NewCheckup(DoctorCheckups doctorCheckups) {
+        var v = _context.DoctorCheckups.Add(doctorCheckups).Entity;
+        if (_context.SaveChanges() > 0) return v;
+        else return null;
+    }
     public List<DoctorCheckups> DoctorCheckupsList() => _context.DoctorCheckups
-        .Include(d => d.Doctor)
-        .Include(d => d.Patient).ToList();
+        .Include(d => d.Doctor).ThenInclude(d => d.Account)
+        .Include(d => d.Patient).ThenInclude(p => p.Account)
+        .ToList();
 
     public List<DoctorCheckups> DoctorCheckupsListDoctor(Doctor doctor) =>
         _context.DoctorCheckups
-            .Include(d => d.Doctor)
-            .Include(d => d.Patient)
+            .Include(d => d.Doctor).ThenInclude(d => d.Account)
+            .Include(d => d.Patient).ThenInclude(p => p.Account)
             .Where(dc => dc.Doctor.Email == doctor.Email && dc.Doctor.Account.Username == doctor.Account.Username).ToList();
+    public List<DoctorCheckups> DoctorCheckupsListPatient(Patient patient) =>
+        _context.DoctorCheckups
+            .Include(d => d.Doctor).ThenInclude(d => d.Account)
+            .Include(d => d.Patient).ThenInclude(p => p.Account)
+            .Where(dc => dc.Patient.Email == patient.Email && dc.Patient.Account.Username == patient.Account.Username).ToList();
+    
 }

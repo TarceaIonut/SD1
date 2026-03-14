@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 
 <h1>@ViewData["Title"]</h1>
-
+<div asp-validation-summary="All" class="text-danger"></div>
 <table class="accounts table">
     <thead>
     <tr>
@@ -18,13 +18,12 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var c in Model)
-    {
+    @foreach (var c in Model) {
         <tr>
-            <td>@c.Doctor.Account.Username</td>
+            <td>@c.Doctor.Account?.Username</td>
             <th>@c.Doctor.Email</th>
             <td>@c.Doctor.Specialty</td>
-            <th>@c.Patient.Account.Username</th>
+            <th>@c.Patient.Account?.Username</th>
             <th>@c.Patient.Email</th>
         </tr>
     }

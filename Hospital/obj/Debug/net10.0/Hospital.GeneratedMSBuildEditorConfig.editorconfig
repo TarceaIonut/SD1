@@ -19,63 +19,63 @@ build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v10.0
 build_property.RootNamespace = Hospital
 build_property.RootNamespace = Hospital
-build_property.ProjectDir = C:\Users\Ionut\RiderProjects\WebApplication2\Hospital\
+build_property.ProjectDir = /home/ionut/RiderProject/SD1/Hospital/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Ionut\RiderProjects\WebApplication2\Hospital
+build_property.MSBuildProjectDirectory = /home/ionut/RiderProject/SD1/Hospital
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Doctors/Doctors.cshtml]
+[/home/ionut/RiderProject/SD1/Hospital/Views/Doctors/Doctors.cshtml]
 build_metadata.AdditionalFiles.TargetPath = 
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yc1xEb2N0b3JzLmNzaHRtbA==
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRG9jdG9ycy9Eb2N0b3JzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Account/Accounts.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY2NvdW50cy5jc2h0bWw=
+[/home/ionut/RiderProject/SD1/Hospital/Views/Account/Accounts.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9BY2NvdW50cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Account/SignIn.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaWduSW4uY3NodG1s
+[/home/ionut/RiderProject/SD1/Hospital/Views/Account/SignIn.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9TaWduSW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Account/SignUp.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaWduVXAuY3NodG1s
+[/home/ionut/RiderProject/SD1/Hospital/Views/Account/SignUp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9TaWduVXAuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Functions/DoctorCheckups.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXERvY3RvckNoZWNrdXBzLmNzaHRtbA==
+[/home/ionut/RiderProject/SD1/Hospital/Views/Functions/DoctorCheckupList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRnVuY3Rpb25zL0RvY3RvckNoZWNrdXBMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Functions/DoctorCheckupsList.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY3Rpb25zXERvY3RvckNoZWNrdXBzTGlzdC5jc2h0bWw=
+[/home/ionut/RiderProject/SD1/Hospital/Views/Functions/DoctorCheckups.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRnVuY3Rpb25zL0RvY3RvckNoZWNrdXBzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[/home/ionut/RiderProject/SD1/Hospital/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Shared/Error.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+[/home/ionut/RiderProject/SD1/Hospital/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+[/home/ionut/RiderProject/SD1/Hospital/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+[/home/ionut/RiderProject/SD1/Hospital/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+[/home/ionut/RiderProject/SD1/Hospital/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Ionut/RiderProjects/WebApplication2/Hospital/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-j6i1r8qj4i
+[/home/ionut/RiderProject/SD1/Hospital/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-dq44avsbpr

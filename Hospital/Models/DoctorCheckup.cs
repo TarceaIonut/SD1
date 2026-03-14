@@ -8,6 +8,8 @@ public class DoctorCheckups
     public int PatientId { get; set; }
     public Patient Patient { get; set; }
     
+    
+    
     protected DoctorCheckups() { }
 
     public DoctorCheckups(Patient patient, Doctor doctor) {

@@ -4,9 +4,9 @@ using System.Text.Json;
 namespace Hospital.Models.ViewModels;
 
 public class DoctorCheckupVewModel {
+    public string? DoctorName { get; set; }
+    public string? DoctorEmail { get; set; }
     [Required]
-    public string DoctorName { get; set; }
-    public string DoctorEmail { get; set; }
     public string PatientName { get; set; }
     [Required]
     public string PatientEmail { get; set; }
