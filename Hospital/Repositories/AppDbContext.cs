@@ -36,13 +36,14 @@ namespace Hospital.Repositories
                 .HasValue<Doctor>(Person.UserRole.Doctor)
                 .HasValue<Patient>(Person.UserRole.Patient);
         }
-        public static String ListToString<T>(DbSet<T> set) where T : class {
+        public static String ListToString<T>(List<T> set) where T : class {
             String buffer = typeof(T).Name + "\n";
-            foreach (var var in set.ToList()) {
+            foreach (var var in set) {
                 buffer += var + "\n";
             }
             return buffer;
         }
+        
     }
 }
 

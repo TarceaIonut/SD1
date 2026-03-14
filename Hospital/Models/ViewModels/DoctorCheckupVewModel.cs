@@ -1,24 +1,45 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace Hospital.Models.ViewModels;
 
 public class DoctorCheckupVewModel {
     [Required]
-    public string DoctorName;
+    public string DoctorName { get; set; }
+    public string DoctorEmail { get; set; }
+    public string PatientName { get; set; }
     [Required]
-    public string DoctorEmail;
-    [Required]
-    public string PatientName;
-    [Required]
-    public string PatientEmail;
+    public string PatientEmail { get; set; }
 
-    public bool canSelectDoctor;
+    public bool canSelectDoctor = false;
+    public bool canSelect = false;
     
-    public List<Doctor> Doctors;
-    public List<Patient> Patients;
+    public List<Doctor> Doctors = new List<Doctor>();
+    public List<Patient> Patients = new List<Patient>();
 
     public DoctorCheckupVewModel(List<Doctor> doctors, List<Patient> patients) {
         Doctors = doctors;
         Patients = patients;
+        canSelectDoctor = true;
+        canSelect =  true;
+    }
+
+    public DoctorCheckupVewModel(DoctorCheckups doctorCheckups) {
+        this.canSelectDoctor = true;
+        this.canSelect = true;
+        this.DoctorEmail = doctorCheckups.Doctor.Email;
+        this.DoctorName = doctorCheckups.Doctor.Account.Username;
+        this.PatientEmail = doctorCheckups.Patient.Email;
+        this.PatientName = doctorCheckups.Patient.Account.Username;
+    }
+    public static DoctorCheckupVewModel EmptyInstance() {
+        var v = new DoctorCheckupVewModel(new List<Doctor>(), new List<Patient>());
+        v.canSelectDoctor = false;
+        v.canSelect =  false;
+        return v;
+    }
+    public DoctorCheckupVewModel() {}
+    public override string ToString() {
+        return JsonSerializer.Serialize(this);
     }
 }

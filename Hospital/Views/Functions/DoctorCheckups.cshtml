@@ -1,6 +1,4 @@
 ﻿@model Hospital.Models.ViewModels.DoctorCheckupVewModel
-
-
 @{
     ViewData["Title"] = "Checkups";
 }
@@ -11,7 +9,7 @@
 
 <div class="container-fluid">
     <div class="row align-items-start">
-        <div class="col-md-5">
+        <div class="col-md-4">
             <table class="accounts table table-striped table-bordered">
                 <thead>
                 <tr>
@@ -21,26 +19,49 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if (@Model.Doctors != null)
+                @foreach (var doctor in @Model.Doctors)
                 {
-                    @foreach (var doctor in @Model.Doctors)
-                    {
-                        <tr>
-                            <th>@doctor.Account?.Username</th>
-                            <th>@doctor.Email</th>
-                            <th>@doctor.Specialty</th>
-                        </tr>
-                    }
+                    <tr>
+                        <th>@doctor.Account?.Username</th>
+                        <th>@doctor.Email</th>
+                        <th>@doctor.Specialty</th>
+                    </tr>
                 }
                 </tbody>
             </table>
         </div>
-        
-        <div class="col-md-2 d-flex justify-content-center align-items-center mt-5">
+        <div class="col-md-4 d-flex justify-content-center align-items-center mt-5 flex-column">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <h1>Do be continued</h1>
+            @if (@Model.canSelect) { 
+                <form asp-controller="Functions" asp-action="DoctorCheckups" method="post">
+                    @if (@Model.canSelectDoctor) {
+                        <div>
+                            <div class="input">
+                                <label asp-for="DoctorName">Doctor Name</label>
+                                <input asp-for="DoctorName" placeholder="Enter Doctor Name"/>
+                            </div>
+                            <div class="input">
+                                <label asp-for="DoctorEmail">Doctor Email</label>
+                                <input asp-for="DoctorEmail" placeholder="Enter Doctor Email"/>
+                            </div>
+                        </div>
+                    }
+                    <div>
+                        <div class="input">
+                            <label asp-for="PatientName">Patient Name</label>
+                            <input asp-for="PatientName" placeholder="Enter Patient Name"/>
+                        </div>
+                        <div class="input">
+                            <label asp-for="PatientEmail">Patient Email</label>
+                            <input asp-for="PatientEmail" placeholder="Enter Patient Email"/>
+                        </div>
+                    </div>        
+                    <button type="submit">New Checkup</button>
+                </form>
+                
+            }
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <table class="accounts table table-striped table-bordered">
                 <thead>
                 <tr>

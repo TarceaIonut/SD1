@@ -22,4 +22,6 @@ public class FunctionsService
         var v = _repository.NewCheckup(new DoctorCheckups(patient, doc));
         return Result<DoctorCheckups, string>.Success(v);
     }
+    public List<DoctorCheckups> DoctorCheckupsList() => _repository.DoctorCheckupsList();
+    public List<DoctorCheckups> DoctorCheckupsListDoctor(Doctor doctor) => _repository.DoctorCheckupsListDoctor(doctor);
 }
