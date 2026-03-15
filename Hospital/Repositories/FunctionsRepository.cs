@@ -44,5 +44,16 @@ public class FunctionsRepository {
             .Include(d => d.Doctor).ThenInclude(d => d.Account)
             .Include(d => d.Patient).ThenInclude(p => p.Account)
             .Where(dc => dc.Patient.Email == patient.Email && dc.Patient.Account.Username == patient.Account.Username).ToList();
-    
+
+    public bool DoctorCheckupsDelete(int id) {
+        var save = _context.DoctorCheckups.Where(dc => dc.Id == id).ExecuteDelete();
+        return save > 0;
+    }
+
+    public bool DoctorCheckupsUpdate(DoctorCheckups dc) {
+        _context.DoctorCheckups.Update(dc);
+        var save = _context.SaveChanges();
+        return save > 0;
+    }
+    public DoctorCheckups? FindCheckup(int id) => _context.DoctorCheckups.Find(id);
 }

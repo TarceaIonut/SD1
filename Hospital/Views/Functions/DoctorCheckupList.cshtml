@@ -1,4 +1,4 @@
-﻿@model List<Hospital.Models.DoctorCheckups>
+﻿@model Hospital.Models.ViewModels.DoctorCheckupsFunctions
 @{
     ViewData["Title"] = "Doctor Checkup List";
 }
@@ -10,24 +10,50 @@
 <table class="accounts table">
     <thead>
     <tr>
+        <th>Id</th>
         <th>Doctor Name</th>
         <th>Doctor Email</th>
         <th>Speciality</th>
         <th>Patient Name</th>
         <th>Patient Email</th>
+        <th>Appointment Date</th>
+        <th>Description</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var c in Model) {
+    @foreach (var c in Model.DoctorCheckups) {
         <tr>
+            <th>@c.Id</th>
             <td>@c.Doctor.Account?.Username</td>
             <th>@c.Doctor.Email</th>
             <td>@c.Doctor.Specialty</td>
             <th>@c.Patient.Account?.Username</th>
             <th>@c.Patient.Email</th>
+            <th>@c.AppointmentDate.ToString("f")</th>
+            <th>@c.Description</th>
         </tr>
     }
-    
     </tbody>
-    
 </table>
+@if (@Model.DoctorCheckups.Count > 0) {
+    <form method="post">
+        <div class="input">
+            <label asp-for="Id">Checkup Id</label>
+            <input asp-for="Id" placeholder="Enter Checkup Id"/>
+        </div>
+        <div class="input">
+            <label asp-for="Description">Description</label>
+            <input asp-for="Description" placeholder="Enter Description"/>
+        </div>
+        <div class="input">
+            <label asp-for="AppointmentDate">Appointment Date</label>
+            <input asp-for="AppointmentDate" placeholder="Enter DAppointment Date"/>
+        </div>
+        <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupDelete">Delete</button>
+        <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupUpdate">Update</button>
+    </form>
+
+}else {
+    <label>You dont have the right. Fuck you</label>   
+}

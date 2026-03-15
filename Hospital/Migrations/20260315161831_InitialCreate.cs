@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -54,7 +55,9 @@ namespace Hospital.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DoctorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PatientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    PatientId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AppointmentDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

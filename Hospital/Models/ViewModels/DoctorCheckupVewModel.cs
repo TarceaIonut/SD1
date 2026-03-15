@@ -10,6 +10,10 @@ public class DoctorCheckupVewModel {
     public string PatientName { get; set; }
     [Required]
     public string PatientEmail { get; set; }
+    [DataType(DataType.DateTime)]
+    public DateTime AppointmentDate { get; set; }
+    
+    public string Description { get; set; }
 
     public bool canSelectDoctor = false;
     public bool canSelect = false;

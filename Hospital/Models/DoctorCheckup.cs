@@ -1,4 +1,6 @@
-﻿namespace Hospital.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Hospital.Models;
 
 public class DoctorCheckups
 {
@@ -8,12 +10,16 @@ public class DoctorCheckups
     public int PatientId { get; set; }
     public Patient Patient { get; set; }
     
+    [DataType(DataType.DateTime)]
+    public DateTime AppointmentDate { get; set; }
     
-    
+    public string Description { get; set; }
     protected DoctorCheckups() { }
 
-    public DoctorCheckups(Patient patient, Doctor doctor) {
+    public DoctorCheckups(Patient patient, Doctor doctor, DateTime appointmentDate, string description) {
         Doctor = doctor;
         Patient = patient;
+        AppointmentDate = appointmentDate;
+        Description = description;
     }
 }
