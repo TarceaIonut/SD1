@@ -101,6 +101,16 @@ public class FunctionsController : Controller {
     }
 
     [HttpPost]
+    public async Task<ActionResult> DoctorCheckupSort(DoctorCheckupsFunctions model) {
+        model.DoctorCheckups = DoctorCheckupListP();
+        var s = _service.DoctorCheckupsSort(model.DoctorCheckups, model.sortOrder, model.sortOn);
+        if (s != null) {
+            ModelState.AddModelError("", s!);
+        }
+        return View("DoctorCheckupList", model);
+    }
+
+    [HttpPost]
     public async Task<ActionResult> DoctorCheckupUpdate(DoctorCheckupsFunctions model) {
         var s = checkModel(model);
         if (s != null) {

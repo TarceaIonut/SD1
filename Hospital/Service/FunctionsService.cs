@@ -35,4 +35,29 @@ public class FunctionsService
         if (r) return null;
         return "Cound not update: IDK why";
     }
+
+    public string? DoctorCheckupsSort(List<DoctorCheckups> list, DoctorCheckupsFunctions.SortOrder? sortOrder,
+        DoctorCheckupsFunctions.SortOn? sortOn) {
+        if (sortOrder == null) return "sortOrder is null";
+        if (sortOn == null) return "sortOn is null";
+        switch (sortOn, sortOrder) {
+            case (DoctorCheckupsFunctions.SortOn.DATE, DoctorCheckupsFunctions.SortOrder.ASC):
+                list.Sort((x, y) => x.AppointmentDate.CompareTo(y.AppointmentDate));
+                break;
+
+            case (DoctorCheckupsFunctions.SortOn.DATE, DoctorCheckupsFunctions.SortOrder.DESC):
+                list.Sort((x, y) => y.AppointmentDate.CompareTo(x.AppointmentDate));
+                break;
+            case (DoctorCheckupsFunctions.SortOn.NAME, DoctorCheckupsFunctions.SortOrder.ASC):
+                list.Sort((x, y) => 
+                    String.Compare(x.Patient.Account.Username,y.Patient.Account.Username, StringComparison.Ordinal));
+                break;
+            case (DoctorCheckupsFunctions.SortOn.NAME, DoctorCheckupsFunctions.SortOrder.DESC):
+                list.Sort((x, y) => 
+                    String.Compare(y.Patient.Account.Username,x.Patient.Account.Username, StringComparison.Ordinal));
+                break;
+            
+        }
+        return null;
+    }
 }

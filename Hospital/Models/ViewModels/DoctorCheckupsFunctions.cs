@@ -10,7 +10,19 @@ public class DoctorCheckupsFunctions {
     public DateTime? AppointmentDate { get; set; }
     
     public string? Description { get; set; }
-    
+
+    public enum SortOn {
+        DATE,
+        NAME 
+    }
+
+    public enum SortOrder {
+        ASC,
+        DESC
+    }
+
+    public SortOrder? sortOrder { get; set; }
+    public SortOn? sortOn { get; set; }
 
     public DoctorCheckupsFunctions(List<DoctorCheckups> doctorCheckups) {
         DoctorCheckups = doctorCheckups;
