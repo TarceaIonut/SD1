@@ -36,7 +36,7 @@
     }
     </tbody>
 </table>
-@if (@Model.DoctorCheckups.Count > 0) {
+@if (@Model.DoctorCheckups.Count > 0 && @Context.Session.GetString("UserRole").Equals("Patient") == false) {
     <form method="post">
         <div class="input">
             <label asp-for="Id">Checkup Id</label>
@@ -50,10 +50,9 @@
             <label asp-for="AppointmentDate">Appointment Date</label>
             <input asp-for="AppointmentDate" placeholder="Enter DAppointment Date"/>
         </div>
+        
         <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupDelete">Delete</button>
         <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupUpdate">Update</button>
     </form>
 
-}else {
-    <label>You dont have the right</label>   
 }
