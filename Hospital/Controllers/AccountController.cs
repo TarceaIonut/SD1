@@ -8,8 +8,9 @@ namespace Hospital.Controllers;
 
 public class AccountController : Controller {
     private readonly AccountService _service;
-    public AccountController(AccountService service)
-    {
+    private readonly IUserService  _userService;
+    public AccountController(AccountService service, IUserService userService) {
+        _userService = userService;
         _service = service;
     }
 
@@ -21,10 +22,10 @@ public class AccountController : Controller {
         var res = _service.SignIn(model);
         if (res.HasValue()) {
             var person = res.Value!;
-            HttpContext.Session.SetInt32("UserId", person.First.Id);
-            HttpContext.Session.SetString("UserName", person.Second.Username);
-            HttpContext.Session.SetString("UserEmail", person.First.Email);
-            HttpContext.Session.SetString("UserRole", person.First.Role.ToString());
+            _userService.SetUserId(person.First.Id);
+            _userService.SetUser(person.Second.Username);
+            _userService.SetEmail(person.First.Email);
+            _userService.SetRole(person.First.Role);
         }else {
             var err = res.Error!;
             ModelState.AddModelError("", err);
@@ -41,10 +42,10 @@ public class AccountController : Controller {
             ModelState.AddModelError("",  res.Error!);
         }else {
             var person = res.Value!;
-            HttpContext.Session.SetInt32("UserId", person.First.Id);
-            HttpContext.Session.SetString("UserName", person.Second.Username);
-            HttpContext.Session.SetString("UserEmail", person.First.Email);
-            HttpContext.Session.SetString("UserRole", person.First.Role.ToString());
+            _userService.SetUserId(person.First.Id);
+            _userService.SetUser(person.Second.Username);
+            _userService.SetEmail(person.First.Email);
+            _userService.SetRole(person.First.Role);
             var account = person.Second;
             //ModelState.AddModelError("",  account + " " + account.person + "\n");
         }
@@ -52,10 +53,10 @@ public class AccountController : Controller {
     }
     [HttpPost]
     public IActionResult SignOut() {
-        HttpContext.Session.SetInt32("UserId", -1);
-        HttpContext.Session.SetString("UserName", "Unsigned");
-        HttpContext.Session.SetString("UserEmail", "");
-        HttpContext.Session.SetString("UserRole", "");
+        _userService.SetUserId(-1);
+        _userService.SetUser("Unsigned");
+        _userService.SetEmail("");
+        _userService.SetRole("");
         return RedirectToAction("Index", "Home");
     }
 
@@ -74,7 +75,7 @@ public class AccountController : Controller {
 
     public IActionResult Accounts()
     {
-        var role = GetCurrentRole.Role(HttpContext);
+        var role = _userService.GetRole();
         if (role == Person.UserRole.Admin) {
             return View(_service.FindAll());
         }

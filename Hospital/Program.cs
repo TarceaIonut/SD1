@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Hospital.Controllers;
+using Hospital.Models;
 using Hospital.Repositories;
 using Hospital.Service;
 
@@ -13,6 +14,9 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 // Add services to the container.

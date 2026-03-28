@@ -9,15 +9,16 @@ namespace Hospital.Controllers;
 
 public class FunctionsController : Controller {
     private readonly FunctionsService _service;
-
-    public FunctionsController(FunctionsService service) {
+    private readonly IUserService  _userService;
+    public FunctionsController(FunctionsService service,  IUserService userService) {
         _service = service;
+        _userService = userService;
     }
 
     [HttpGet]
     public IActionResult DoctorCheckups() {
         var v = _service.GetDoctorCheckups();
-        var r = GetCurrentRole.Role(HttpContext);
+        var r = _userService.GetRole();
         if (r == Person.UserRole.Admin) v.canSelectDoctor = true;
         else if (r == Person.UserRole.Doctor) v.canSelectDoctor = false;
         else {
@@ -28,9 +29,10 @@ public class FunctionsController : Controller {
     }
     [HttpPost]
     public async Task<ActionResult> DoctorCheckups(DoctorCheckupVewModel model) {
-        if (GetCurrentRole.Role(HttpContext) == Person.UserRole.Doctor) {
-            var de = HttpContext.Session.GetString("UserEmail");
-            var dn =  HttpContext.Session.GetString("UserName");
+        if (_userService.GetRole() == Person.UserRole.Doctor)
+        {
+            var de = _userService.GetEmail();
+            var dn =  _userService.GetUser();
             if (de == null || dn == null) {
                 ModelState.AddModelError("",  "UserEmail/UserName undefined = " + de + " / " + dn);
                 return View(model);
@@ -43,7 +45,7 @@ public class FunctionsController : Controller {
             ModelState.AddModelError("", r.Error!);
         }
         var v = _service.GetDoctorCheckups();
-        var res = GetCurrentRole.Role(HttpContext);
+        var res = _userService.GetRole();
         if (res == Person.UserRole.Admin) v.canSelectDoctor = true;
         else if (res == Person.UserRole.Doctor) v.canSelectDoctor = false;
         else {
@@ -56,11 +58,11 @@ public class FunctionsController : Controller {
     [HttpGet]
     public IActionResult DoctorCheckupList() {
         //ModelState.AddModelError("", JsonSerializer.Serialize(_service.DoctorCheckupsList()));
-        return View(new DoctorCheckupsFunctions(DoctorCheckupListP(), GetCurrentRole.Role(HttpContext) == Person.UserRole.Admin));
+        return View(new DoctorCheckupsFunctions(DoctorCheckupListP(), _userService.GetRole() == Person.UserRole.Admin));
     }
 
     private List<DoctorCheckups> DoctorCheckupListP() {
-        var r = GetCurrentRole.Role(HttpContext);
+        var r = _userService.GetRole();
         if (r == null) {
             ModelState.AddModelError("",  "UserEmail/UserName undefined");
             return new List<DoctorCheckups>();
@@ -68,8 +70,8 @@ public class FunctionsController : Controller {
         if (r == Person.UserRole.Admin) {
             return _service.DoctorCheckupsList();
         }else if (r == Person.UserRole.Doctor) {
-            var de = HttpContext.Session.GetString("UserEmail");
-            var dn =  HttpContext.Session.GetString("UserName");
+            var de = _userService.GetEmail();
+            var dn =  _userService.GetUser();
             if (de == null || dn == null) {
                 ModelState.AddModelError("",  "UserEmail/UserName undefined = " + de + " / " + dn);
                 return new List<DoctorCheckups>();
@@ -77,8 +79,8 @@ public class FunctionsController : Controller {
             var res = _service.DoctorCheckupsListDoctor(FromUserEmail(de, dn));
             return res;
         }else if (r == Person.UserRole.Patient) {
-            var de = HttpContext.Session.GetString("UserEmail");
-            var dn =  HttpContext.Session.GetString("UserName");
+            var de = _userService.GetEmail();
+            var dn =  _userService.GetUser();
             if (de == null || dn == null) {
                 ModelState.AddModelError("",  "UserEmail/UserName undefined = " + de + " / " + dn);
                 return new List<DoctorCheckups>();
