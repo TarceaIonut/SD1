@@ -1,4 +1,5 @@
 ﻿using Hospital.Models;
+using Hospital.Models.HelperStructures;
 using Hospital.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Hospital.Repositories;
@@ -73,14 +74,35 @@ public class AccountController : Controller {
         return SignOut();
     }
 
-    public IActionResult Accounts()
-    {
+    public IActionResult Accounts() {
         var role = _userService.GetRole();
-        if (role == Person.UserRole.Admin) {
-            return View(_service.FindAll());
+        if (role == Person.UserRole.Admin)
+        {
+            return View(new AccountsViewModel(_service.GetAllPersons() ) );
         }
         ModelState.AddModelError("",  "Admin role needed");
-        return View(new List<Pair<Person, Account>>());
-        return RedirectToAction("Index", "Home");
+        return View(new AccountsViewModel());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> ExportAccounts(AccountsViewModel model) {
+        var list = GetAllPersons_(model.SortOrder, model.UserRole);
+        model._persons = list;
+        if (model.Format == null) {
+            ModelState.AddModelError("", "Format field must be set");
+        }else {
+            var s = ExportHelper.GetStrategy(model.Format!.Value);
+            var bytes = s.ExportData(list);
+            return File(bytes, s.ContentType, $"Persons_{DateTime.Now:yyyyMMdd}.{s.extention}");
+        }
+        return View("Accounts", model);
+    }
+    
+    public List<Person> GetAllPersons_(DoctorCheckupsFunctions.SortOrder? sortOrder, Person.UserRole? role) {
+        var v = role == null ? _service.GetAllPersons() : _service.GetAllPersons(role!.Value);
+        if (sortOrder != null) {
+            AccountService.SortPersonsByName(v, sortOrder.Value);
+        }
+        return v;
     }
 }

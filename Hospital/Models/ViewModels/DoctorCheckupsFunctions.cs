@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Hospital.Models.HelperStructures;
 
 namespace Hospital.Models.ViewModels;
 
@@ -10,6 +11,7 @@ public class DoctorCheckupsFunctions {
     public DateTime? AppointmentDate { get; set; }
     
     public string? Description { get; set; }
+    public Formats? Format { get; set; }
 
     public enum SortOn {
         DATE,

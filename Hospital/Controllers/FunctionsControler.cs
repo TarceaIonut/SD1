@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Hospital.Models;
+using Hospital.Models.HelperStructures;
 using Hospital.Models.ViewModels;
 using Hospital.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -108,6 +109,25 @@ public class FunctionsController : Controller {
         var s = _service.DoctorCheckupsSort(model.DoctorCheckups, model.sortOrder, model.sortOn);
         if (s != null) {
             ModelState.AddModelError("", s!);
+        }
+        return View("DoctorCheckupList", model);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Export(DoctorCheckupsFunctions model) {
+        model.DoctorCheckups = DoctorCheckupListP();
+        if (model.sortOn != null && model.sortOrder != null) {
+            var s = _service.DoctorCheckupsSort(model.DoctorCheckups, model.sortOrder, model.sortOn);
+            if (s != null) {
+                ModelState.AddModelError("", s!);
+            }
+        }
+        if (model.Format == null) {
+            ModelState.AddModelError("", "Format field must be set");
+        }else {
+            var s = ExportHelper.GetStrategy(model.Format!.Value);
+            var bytes = s.ExportData(model.DoctorCheckups);
+            return File(bytes, s.ContentType, $"DoctorCheckups_{DateTime.Now:yyyyMMdd}.{s.extention}");
         }
         return View("DoctorCheckupList", model);
     }
