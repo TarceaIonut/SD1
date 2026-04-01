@@ -28,11 +28,16 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<DoctorsService>();
 builder.Services.AddScoped<FunctionsService>();
 builder.Services.AddScoped<AppDbContext>();
+builder.Services.AddSingleton<NotificationService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=hospital.db"));
 
+
+
 var app = builder.Build();
+
+app.Services.GetRequiredService<NotificationService>();
 
 app.UseSession();
 app.UseRouting();   

@@ -45,9 +45,13 @@ public class FunctionsRepository {
             .Include(d => d.Patient).ThenInclude(p => p.Account)
             .Where(dc => dc.Patient.Email == patient.Email && dc.Patient.Account.Username == patient.Account.Username).ToList();
 
-    public bool DoctorCheckupsDelete(int id) {
-        var save = _context.DoctorCheckups.Where(dc => dc.Id == id).ExecuteDelete();
-        return save > 0;
+    public DoctorCheckups? DoctorCheckupsDelete(int id) {
+        var v = FindCheckup(id);
+        if (v != null) {
+            _context.DoctorCheckups.Remove(v);
+            if (_context.SaveChanges() > 0) return v;
+        }
+        return null;
     }
 
     public bool DoctorCheckupsUpdate(DoctorCheckups dc) {
@@ -55,5 +59,8 @@ public class FunctionsRepository {
         var save = _context.SaveChanges();
         return save > 0;
     }
-    public DoctorCheckups? FindCheckup(int id) => _context.DoctorCheckups.Find(id);
+    public DoctorCheckups? FindCheckup(int id) => _context.DoctorCheckups
+        .Include(d => d.Doctor).ThenInclude(d => d.Account)
+        .Include(d => d.Patient).ThenInclude(p => p.Account)
+        .FirstOrDefault(d => d.Id == id);
 }

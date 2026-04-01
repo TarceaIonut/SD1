@@ -22,4 +22,9 @@ public class DoctorCheckups
         AppointmentDate = appointmentDate;
         Description = description;
     }
+
+    public string GetInfo() =>
+        $"DoctorCheckup: AppointmentDate = {AppointmentDate.ToShortDateString()}, Description = {Description}, \n" +
+               $"DoctorName = {this.Doctor.Account.Username}, DoctorEmail = {this.Doctor.Email}, Speciality = {this.Doctor.Specialty} \n" +
+        $"PatientName = {Patient.Account.Username}, PatientEmail = {Patient.Email}" ;
 }
