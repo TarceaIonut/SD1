@@ -30,8 +30,10 @@ builder.Services.AddScoped<FunctionsService>();
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddSingleton<NotificationService>();
 
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseSqlite("Data Source=hospital.db"),ServiceLifetime.Singleton);
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=hospital.db"));
+    options.UseSqlite(DatabaseConnectionManager.Instance.ConnectionString));
 
 
 
@@ -42,11 +44,9 @@ app.Services.GetRequiredService<NotificationService>();
 app.UseSession();
 app.UseRouting();   
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
