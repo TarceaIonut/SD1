@@ -1,0 +1,14 @@
+# IDE and Build folders
+bin/
+obj/
+.idea/
+.vs/
+
+# SQLite Database and Lock files
+*.db
+*.db-shm
+*.db-wal
+
+# OS generated files
+Thumbs.db
+.DS_Store

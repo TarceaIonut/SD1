@@ -78,5 +78,16 @@
         </div>
         <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupSort">Sort</button>
     </form>
-    
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Format" class="control-label"></label>
+            <select asp-for="Format" 
+                    class="form-control" 
+                    asp-items="Html.GetEnumSelectList<Hospital.Models.HelperStructures.Formats>()">
+                <option value="">-- Select Role --</option>
+            </select>
+            <span asp-validation-for="Format" class="text-danger"></span>
+        </div>
+        <button type="submit" asp-controller="Functions" asp-action="Export">Export</button>
+    </form>
 }

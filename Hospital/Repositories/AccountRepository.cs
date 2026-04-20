@@ -43,6 +43,7 @@ namespace Hospital.Repositories {
             _context.Accounts.Remove(v);
             return _context.SaveChanges() > 0;
         }
-        
+        public List<Person> GetAllPersons() =>  _context.Persons.Include(a => a.Account).ToList();
+        public List<Person> GetAllPersons(Person.UserRole role) =>  _context.Persons.Include(a => a.Account).Where(a => a.Role == role) .ToList();
     }
 }

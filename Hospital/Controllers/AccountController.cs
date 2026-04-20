@@ -1,4 +1,5 @@
 ﻿using Hospital.Models;
+using Hospital.Models.HelperStructures;
 using Hospital.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Hospital.Repositories;
@@ -8,8 +9,9 @@ namespace Hospital.Controllers;
 
 public class AccountController : Controller {
     private readonly AccountService _service;
-    public AccountController(AccountService service)
-    {
+    private readonly IUserService  _userService;
+    public AccountController(AccountService service, IUserService userService) {
+        _userService = userService;
         _service = service;
     }
 
@@ -21,10 +23,10 @@ public class AccountController : Controller {
         var res = _service.SignIn(model);
         if (res.HasValue()) {
             var person = res.Value!;
-            HttpContext.Session.SetInt32("UserId", person.First.Id);
-            HttpContext.Session.SetString("UserName", person.Second.Username);
-            HttpContext.Session.SetString("UserEmail", person.First.Email);
-            HttpContext.Session.SetString("UserRole", person.First.Role.ToString());
+            _userService.SetUserId(person.First.Id);
+            _userService.SetUser(person.Second.Username);
+            _userService.SetEmail(person.First.Email);
+            _userService.SetRole(person.First.Role);
         }else {
             var err = res.Error!;
             ModelState.AddModelError("", err);
@@ -41,10 +43,10 @@ public class AccountController : Controller {
             ModelState.AddModelError("",  res.Error!);
         }else {
             var person = res.Value!;
-            HttpContext.Session.SetInt32("UserId", person.First.Id);
-            HttpContext.Session.SetString("UserName", person.Second.Username);
-            HttpContext.Session.SetString("UserEmail", person.First.Email);
-            HttpContext.Session.SetString("UserRole", person.First.Role.ToString());
+            _userService.SetUserId(person.First.Id);
+            _userService.SetUser(person.Second.Username);
+            _userService.SetEmail(person.First.Email);
+            _userService.SetRole(person.First.Role);
             var account = person.Second;
             //ModelState.AddModelError("",  account + " " + account.person + "\n");
         }
@@ -52,10 +54,10 @@ public class AccountController : Controller {
     }
     [HttpPost]
     public IActionResult SignOut() {
-        HttpContext.Session.SetInt32("UserId", -1);
-        HttpContext.Session.SetString("UserName", "Unsigned");
-        HttpContext.Session.SetString("UserEmail", "");
-        HttpContext.Session.SetString("UserRole", "");
+        _userService.SetUserId(-1);
+        _userService.SetUser("Unsigned");
+        _userService.SetEmail("");
+        _userService.SetRole("");
         return RedirectToAction("Index", "Home");
     }
 
@@ -72,14 +74,35 @@ public class AccountController : Controller {
         return SignOut();
     }
 
-    public IActionResult Accounts()
-    {
-        var role = GetCurrentRole.Role(HttpContext);
-        if (role == Person.UserRole.Admin) {
-            return View(_service.FindAll());
+    public IActionResult Accounts() {
+        var role = _userService.GetRole();
+        if (role == Person.UserRole.Admin)
+        {
+            return View(new AccountsViewModel(_service.GetAllPersons() ) );
         }
         ModelState.AddModelError("",  "Admin role needed");
-        return View(new List<Pair<Person, Account>>());
-        return RedirectToAction("Index", "Home");
+        return View(new AccountsViewModel());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> ExportAccounts(AccountsViewModel model) {
+        var list = GetAllPersons_(model.SortOrder, model.UserRole);
+        model._persons = list;
+        if (model.Format == null) {
+            ModelState.AddModelError("", "Format field must be set");
+        }else {
+            var s = ExportHelper.GetStrategy(model.Format!.Value);
+            var bytes = s.ExportData(list);
+            return File(bytes, s.ContentType, $"Persons_{DateTime.Now:yyyyMMdd}.{s.extention}");
+        }
+        return View("Accounts", model);
+    }
+    
+    public List<Person> GetAllPersons_(DoctorCheckupsFunctions.SortOrder? sortOrder, Person.UserRole? role) {
+        var v = role == null ? _service.GetAllPersons() : _service.GetAllPersons(role!.Value);
+        if (sortOrder != null) {
+            AccountService.SortPersonsByName(v, sortOrder.Value);
+        }
+        return v;
     }
 }

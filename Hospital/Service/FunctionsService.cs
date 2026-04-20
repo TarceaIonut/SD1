@@ -20,18 +20,34 @@ public class FunctionsService
         if (patient == null) return Result<DoctorCheckups, string>.Error_("could not find patient: Email = " 
              + doctorCheckupVewModel.PatientEmail + "User = " + doctorCheckupVewModel.PatientName);
         var v = _repository.NewCheckup(new DoctorCheckups(patient, doc, doctorCheckupVewModel.AppointmentDate,  doctorCheckupVewModel.Description));
-        return Result<DoctorCheckups, string>.ResultIf(v, "unknown error: at add new Checkup: saveChanges > 0 == false", v != null);
+        var r = Result<DoctorCheckups, string>.ResultIf
+            (v, "unknown error: at add new Checkup: saveChanges > 0 == false", v != null);
+        if (r.HasValue()) {
+            EventBroker.Instance.NewEvent_CRUD(EventType.CREATE, r.Value!.GetInfo());
+        }
+        return r;
     }
     public List<DoctorCheckups> DoctorCheckupsList() => _repository.DoctorCheckupsList();
     public List<DoctorCheckups> DoctorCheckupsListDoctor(Doctor doctor) => _repository.DoctorCheckupsListDoctor(doctor);
     public List<DoctorCheckups> DoctorCheckupsListPatient(Patient patient) => _repository.DoctorCheckupsListPatient(patient);
-    public bool DoctorCheckupsDelete(int id) =>  _repository.DoctorCheckupsDelete(id);
+    public bool DoctorCheckupsDelete(int id) {
+        var v = _repository.DoctorCheckupsDelete(id);
+        if (v != null) {
+            EventBroker.Instance.NewEvent_CRUD(EventType.DELETE, v.GetInfo());
+        }
+        return v != null;
+    }
 
     public string? DoctorCheckupsUpdate(int id, string description, DateTime date) {
-        DoctorCheckups? dc = _repository.FindCheckup(id);
-        dc!.Description = description;
-        dc.AppointmentDate = date;
-        var r = _repository.DoctorCheckupsUpdate(dc);
+        DoctorCheckups? dc_og = _repository.FindCheckup(id);
+        if (dc_og == null) return null;
+        DoctorCheckups dc_new = dc_og;
+        dc_new.Description = description;
+        dc_new.AppointmentDate = date;
+        var r = _repository.DoctorCheckupsUpdate(dc_new);
+        if (r) {
+            EventBroker.Instance.NewEvent_CRUD(EventType.UPDATE, dc_og.GetInfo() + "\n" + dc_new.GetInfo());
+        }
         if (r) return null;
         return "Cound not update: IDK why";
     }

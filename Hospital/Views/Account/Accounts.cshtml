@@ -1,4 +1,5 @@
-﻿@model List<Pair<Person,Account>>
+﻿@using Hospital.Models.ViewModels
+@model Hospital.Models.ViewModels.AccountsViewModel
 
 @{
     ViewData["Title"] = "Accounts";
@@ -8,24 +9,47 @@
 
 <h1>@ViewData["Title"]</h1>
 <div asp-validation-summary="All" class="text-danger"></div>
-<table class="accounts table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var doctor in Model)
-    {
+@if (Model.Show) {
+    <table class="accounts table">
+        <thead>
         <tr>
-            <td>@doctor.Second.Username</td>
-            <th>@doctor.First.Email</th>
-            <td>@doctor.First.Role.ToString()</td>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
         </tr>
-    }
+        </thead>
+        <tbody>
+        @if (Model._persons != null)
+        {
+            @foreach (var p in Model._persons)
+            {
+                <tr>
+                    <td>@p.Account.Username</td>
+                    <th>@p.Email</th>
+                    <td>@p.Role.ToString()</td>
+                </tr>
+            }
+        }
     
-    </tbody>
-    
-</table>
+        </tbody>
+    </table>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Format" class="control-label"></label>
+            <select asp-for="Format" 
+                    class="form-control" 
+                    asp-items="Html.GetEnumSelectList<Hospital.Models.HelperStructures.Formats>()">
+                <option value="">-- Select Export Format --</option>
+            </select>
+            <span asp-validation-for="Format" class="text-danger"></span>
+            <label asp-for="SortOrder" class="control-label"></label>
+            <select asp-for="SortOrder" 
+                    class="form-control" 
+                    asp-items="Html.GetEnumSelectList<DoctorCheckupsFunctions.SortOrder>()">
+                <option value="">-- Select Sort Order --</option>
+            </select>
+            <span asp-validation-for="SortOrder" class="text-danger"></span>
+            <button type="submit" asp-controller="Account" asp-action="ExportAccounts">ExportAccounts</button>
+        </div>
+    </form>
+}
