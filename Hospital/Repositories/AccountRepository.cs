@@ -6,6 +6,8 @@ namespace Hospital.Repositories {
         public readonly AppDbContext _context;
         public AccountRepository(AppDbContext context) {
             _context = context;
+            _context.Persons.Include(a => a.Account).Where(a => a.Account == null).ExecuteDelete();
+            _context.SaveChanges();
         }
         public Pair<Person, Account>? FindByNamePass(string name, string password) {
             var a = _context.Accounts.Include(a => a.person).

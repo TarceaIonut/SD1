@@ -21,13 +21,15 @@
         <tbody>
         @if (Model._persons != null)
         {
-            @foreach (var p in Model._persons)
-            {
-                <tr>
-                    <td>@p.Account.Username</td>
-                    <th>@p.Email</th>
-                    <td>@p.Role.ToString()</td>
-                </tr>
+            @foreach (var p in Model._persons) {
+                @if (p != null && p.Account != null) {
+                    <tr>
+                        <td>@p.Account.Username</td>
+                        <th>@p.Email </th>
+                        <td>@p.Role.ToString()</td>
+                    </tr>
+                }
+                
             }
         }
     
