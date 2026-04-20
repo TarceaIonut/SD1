@@ -7,8 +7,15 @@ namespace Hospital.Service;
 public class FunctionsService
 {
     private readonly FunctionsRepository _repository;
-    public FunctionsService(FunctionsRepository repository) {
+    private readonly IUserService  _userService;
+    public FunctionsService(FunctionsRepository repository, IUserService userService) {
         _repository = repository;
+        _userService = userService;
+    }
+
+    private string nullableSring(string? s) {
+        if  (s == null) return "";
+        return s!;
     }
 
     public DoctorCheckupVewModel GetDoctorCheckups() => new(_repository.Doctors(),  _repository.Patients());
@@ -23,7 +30,9 @@ public class FunctionsService
         var r = Result<DoctorCheckups, string>.ResultIf
             (v, "unknown error: at add new Checkup: saveChanges > 0 == false", v != null);
         if (r.HasValue()) {
-            EventBroker.Instance.NewEvent_CRUD(EventType.CREATE, r.Value!.GetInfo());
+            string email_description = r.Value!.GetInfo();
+            sendEvents(r.Value!.Doctor, email_description, EventType.CREATE);
+            sendEvents(r.Value!.Patient, email_description, EventType.CREATE);
         }
         return r;
     }
@@ -33,7 +42,9 @@ public class FunctionsService
     public bool DoctorCheckupsDelete(int id) {
         var v = _repository.DoctorCheckupsDelete(id);
         if (v != null) {
-            EventBroker.Instance.NewEvent_CRUD(EventType.DELETE, v.GetInfo());
+            string email_description = v.GetInfo();
+            sendEvents(v.Doctor, email_description, EventType.DELETE);
+            sendEvents(v.Patient, email_description, EventType.DELETE);
         }
         return v != null;
     }
@@ -46,10 +57,16 @@ public class FunctionsService
         dc_new.AppointmentDate = date;
         var r = _repository.DoctorCheckupsUpdate(dc_new);
         if (r) {
-            EventBroker.Instance.NewEvent_CRUD(EventType.UPDATE, dc_og.GetInfo() + "\n" + dc_new.GetInfo());
+            string email_description = dc_og.GetInfo() + "\n" + dc_new.GetInfo();
+            sendEvents(dc_og.Doctor, email_description, EventType.UPDATE);
+            sendEvents(dc_og.Patient, email_description, EventType.UPDATE);
         }
         if (r) return null;
         return "Cound not update: IDK why";
+    }
+
+    private void sendEvents(Person person, string description, EventType type) {
+        EventBroker.Instance.NewEvent_CRUD(type, description, person.Email, person.Account.Username);
     }
 
     public string? DoctorCheckupsSort(List<DoctorCheckups> list, DoctorCheckupsFunctions.SortOrder? sortOrder,
