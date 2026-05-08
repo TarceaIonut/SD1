@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using System.Text.Json;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace Hospital.Models.HelperStructures;
@@ -14,12 +12,12 @@ public enum Formats {
 public interface IExport {
     byte[] ExportData(List<DoctorCheckups> doctorCheckups);
     byte[] ExportData(List<Person> accounts );
-    string extention { get;  }
+    string Extention { get;  }
     string ContentType { get; }
 }
 
 public class CsvExportStrategy : IExport {
-    public string extention => ".csv";
+    public string Extention => ".csv";
     public string ContentType => "text/csv";
     public byte[] ExportData(List<DoctorCheckups> doctorCheckups) {
         var builder = new System.Text.StringBuilder();
@@ -43,7 +41,7 @@ public class CsvExportStrategy : IExport {
     }
 }
 public class JsonExportStrategy : IExport {
-    public string extention => ".json";
+    public string Extention => ".json";
     public string ContentType => "application/json";
     public byte[] ExportData(List<DoctorCheckups> doctorCheckups) {
         var options = new JsonSerializerOptions { 
@@ -75,7 +73,7 @@ public class JsonExportStrategy : IExport {
 }
 
 public class XmlExportStrategy : IExport {
-    public string extention => ".xml";
+    public string Extention => ".xml";
     public string ContentType => "application/xml";
     public byte[] ExportData(List<DoctorCheckups> doctorCheckups) {
         var doc = new XDocument(
@@ -120,7 +118,8 @@ public static class ExportHelper {
         return f switch {
             Formats.Xml => new XmlExportStrategy(),
             Formats.Json => new JsonExportStrategy(),
-            Formats.Csv => new CsvExportStrategy()
+            Formats.Csv => new CsvExportStrategy(),
+            _ => throw new NotImplementedException("Unknown format: " + f)
         };
     }
 } 

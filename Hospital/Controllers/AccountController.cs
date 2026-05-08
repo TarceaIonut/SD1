@@ -80,6 +80,7 @@ public class AccountController : Controller {
         {
             return View(new AccountsViewModel(_service.GetAllPersons() ) );
         }
+        
         ModelState.AddModelError("",  "Admin role needed");
         return View(new AccountsViewModel());
     }
@@ -93,7 +94,7 @@ public class AccountController : Controller {
         }else {
             var s = ExportHelper.GetStrategy(model.Format!.Value);
             var bytes = s.ExportData(list);
-            return File(bytes, s.ContentType, $"Persons_{DateTime.Now:yyyyMMdd}.{s.extention}");
+            return File(bytes, s.ContentType, $"Persons_{DateTime.Now:yyyyMMdd}.{s.Extention}");
         }
         return View("Accounts", model);
     }
