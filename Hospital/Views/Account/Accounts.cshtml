@@ -9,6 +9,9 @@
 
 <h1>@ViewData["Title"]</h1>
 <div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="test_GRPC" asp-controller="Account" method="get">
+    <button type="submit" class="button-Sign-In">Test gRPC</button>
+</form>
 @if (Model.Show) {
     <table class="accounts table">
         <thead>

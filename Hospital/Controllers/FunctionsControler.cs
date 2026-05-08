@@ -5,6 +5,7 @@ using Hospital.Models.ViewModels;
 using Hospital.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Hospital.Models;
 
 namespace Hospital.Controllers;
 

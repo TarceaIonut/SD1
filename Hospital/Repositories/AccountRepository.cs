@@ -14,6 +14,7 @@ namespace Hospital.Repositories {
                 FirstOrDefault(a => a.Username == name && a.Password == password);
             if  (a == null) return null;
             return new Pair<Person, Account>(a.person , a);
+            
         }
 
         public List<Pair<Person, Account>> FindAll() {

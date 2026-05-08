@@ -25,6 +25,7 @@
             this.Username = username;
             this.Password = password;
             this.person = person;
+            
         }
 
         public override string ToString() {
