@@ -127,7 +127,7 @@ public class FunctionsController : Controller {
         }else {
             var s = ExportHelper.GetStrategy(model.Format!.Value);
             var bytes = s.ExportData(model.DoctorCheckups);
-            return File(bytes, s.ContentType, $"DoctorCheckups_{DateTime.Now:yyyyMMdd}.{s.extention}");
+            return File(bytes, s.ContentType, $"DoctorCheckups_{DateTime.Now:yyyyMMdd}.{s.Extention}");
         }
         return View("DoctorCheckupList", model);
     }
