@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+option csharp_namespace = "AccountDiffService";
+
+package greet;
+
+service Greeter {
+  rpc SayHello (HelloRequest) returns (HelloReply);
+  rpc ListAllAccounts (ListAllAccountsRequest) returns (ListAllAccountsReply);
+  rpc findAccount (AccountUserPassRequest) returns (AccountUserPassReply);
+  rpc getAccountById (getAccountByIdRequest) returns (getAccountByIdReply);
+  rpc newAccount(newAccountRequest) returns (newAccountReply);
+  rpc deleteById (deleteByIdRequest) returns (deleteByIdReply);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+message HelloReply {
+  string message = 1;
+}
+
+message ListAllAccountsRequest {
+
+}
+message AccountPrint{
+  string username = 1;
+  string email = 2;
+  uint32 role = 3;
+}
+message ListAllAccountsReply{
+  repeated AccountPrint accounts = 1;
+}
+
+message AccountUserPassRequest{
+  string username = 1;
+  string password = 2;
+}
+message AccountUserPassReply{
+  bool result = 1;
+}
+
+message getAccountByIdRequest {
+  uint32 id = 1;
+}
+message getAccountByIdReply {
+  AccountPrint result = 1;
+}
+
+message newAccountRequest{
+  AccountPrint account = 1;
+}
+message newAccountReply{
+  bool result = 1;
+}
+
+message deleteByIdRequest{
+  uint32 id = 1;
+}
+message deleteByIdReply{
+  bool result = 1;
+}

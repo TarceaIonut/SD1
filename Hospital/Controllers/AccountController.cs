@@ -1,4 +1,7 @@
-﻿using Hospital.Models;
+﻿using System.Windows.Input;
+using AccountDiffService;
+using Hospital.Controllers.Command;
+using Hospital.Models;
 using Hospital.Models.HelperStructures;
 using Hospital.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +13,11 @@ namespace Hospital.Controllers;
 public class AccountController : Controller {
     private readonly AccountService _service;
     private readonly IUserService  _userService;
-    public AccountController(AccountService service, IUserService userService) {
+    private readonly Greeter.GreeterClient _greeterClient;
+    public AccountController(AccountService service, IUserService userService, Greeter.GreeterClient greeterClient) {
         _userService = userService;
         _service = service;
+        _greeterClient = greeterClient;
     }
 
     [HttpGet]
@@ -105,5 +110,23 @@ public class AccountController : Controller {
             AccountService.SortPersonsByName(v, sortOrder.Value);
         }
         return v;
+    }
+
+    public async Task<IActionResult> test_GRPC() 
+    {
+        ModelState.AddModelError("", "query service Accounts");
+        var command = new TestCommand(_greeterClient);
+        string s = await command.ExecuteAsync();
+        
+        
+        
+        ModelState.AddModelError("", "query service Accounts " + s);
+        
+        var model = new AccountsViewModel 
+        {
+            Show = false, 
+            _persons = new List<Person>() 
+        };
+        return View("Accounts", model);
     }
 }
