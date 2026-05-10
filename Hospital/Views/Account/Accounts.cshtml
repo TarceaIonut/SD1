@@ -25,14 +25,11 @@
         @if (Model._persons != null)
         {
             @foreach (var p in Model._persons) {
-                @if (p != null && p.Account != null) {
-                    <tr>
-                        <td>@p.Account.Username</td>
-                        <th>@p.Email </th>
-                        <td>@p.Role.ToString()</td>
-                    </tr>
-                }
-                
+                <tr>
+                    <td>@p.Username</td>
+                    <th>@p.Email </th>
+                    <td>@p.role.ToString()</td>
+                </tr>
             }
         }
     

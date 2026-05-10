@@ -14,10 +14,12 @@ public class AccountController : Controller {
     private readonly AccountService _service;
     private readonly IUserService  _userService;
     private readonly Greeter.GreeterClient _greeterClient;
-    public AccountController(AccountService service, IUserService userService, Greeter.GreeterClient greeterClient) {
+    private readonly ILogger<AccountController> _logger;
+    public AccountController(AccountService service, IUserService userService, Greeter.GreeterClient greeterClient, Logger<AccountController> logger) {
         _userService = userService;
         _service = service;
         _greeterClient = greeterClient;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -79,13 +81,21 @@ public class AccountController : Controller {
         return SignOut();
     }
 
+    // public IActionResult _Accounts() {
+    //     var role = _userService.GetRole();
+    //     if (role == Person.UserRole.Admin) {
+    //         return View(new AccountsViewModel(_service.GetAllPersons() ) );
+    //     }
+    //     ModelState.AddModelError("",  "Admin role needed");
+    //     return View(new AccountsViewModel());
+    // }
+
     public IActionResult Accounts() {
         var role = _userService.GetRole();
-        if (role == Person.UserRole.Admin)
-        {
-            return View(new AccountsViewModel(_service.GetAllPersons() ) );
+        if (role == Person.UserRole.Admin) {
+            var c = new GetAllAccountsCommand(_greeterClient, _logger);
+            return View(new AccountsViewModel(c.ExecuteAsync().Result ) );
         }
-        
         ModelState.AddModelError("",  "Admin role needed");
         return View(new AccountsViewModel());
     }
@@ -93,7 +103,7 @@ public class AccountController : Controller {
     [HttpPost]
     public async Task<ActionResult> ExportAccounts(AccountsViewModel model) {
         var list = GetAllPersons_(model.SortOrder, model.UserRole);
-        model._persons = list;
+        //model._persons = list;
         if (model.Format == null) {
             ModelState.AddModelError("", "Format field must be set");
         }else {
@@ -112,20 +122,17 @@ public class AccountController : Controller {
         return v;
     }
 
-    public async Task<IActionResult> test_GRPC() 
-    {
+    public async Task<IActionResult> test_GRPC() {
         ModelState.AddModelError("", "query service Accounts");
         var command = new TestCommand(_greeterClient);
         string s = await command.ExecuteAsync();
-        
-        
         
         ModelState.AddModelError("", "query service Accounts " + s);
         
         var model = new AccountsViewModel 
         {
             Show = false, 
-            _persons = new List<Person>() 
+            _persons = new List<GetAllAccountsCommand.AccountPrint>() 
         };
         return View("Accounts", model);
     }

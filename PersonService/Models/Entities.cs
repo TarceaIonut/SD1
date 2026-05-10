@@ -1,15 +1,4 @@
-﻿public abstract class Person : IVisitor {
-    public static Person NewPerson(UserRole role, int id, string email, string? specialty = null) {
-        switch (role) {
-            case UserRole.Admin: return new Admin(id, email);
-            case UserRole.Doctor:
-                if (specialty == null) 
-                    throw new NullReferenceException(nameof(specialty));
-                return new Doctor(id, email, specialty);
-            case UserRole.Patient: return new Patient(id, email);
-        }
-        throw new ArgumentOutOfRangeException(nameof(role));
-    }
+public abstract class Person : IVisitor {
     public enum UserRole
     {
         Admin = 1,
@@ -19,7 +8,6 @@
     public int Id { get; set; }
     public string Email { get; set; }
     public UserRole Role { get; set; }
-    public Accounts Account { get; set; }
     protected void SetPerson(string email, UserRole role) {
         Email = email;
         Role = role;
@@ -34,12 +22,6 @@ public class Doctor : Person, IDoctor {
         base.SetPerson(email, role);
         Specialty = specialty;
     }
-    public Doctor(int id, string email, string specialty) {
-        base.Id = id;
-        Email = email;
-        Role = UserRole.Doctor;
-        Specialty = specialty;
-    }
     public string Specialty { get; set; }
 }
 
@@ -48,23 +30,12 @@ public class Admin : Person, IAdministrator {
     public Admin(string email, UserRole role) {
         base.SetPerson(email, role);
     }
-
-    public Admin(int id, string email) {
-        base.Id = id;
-        Email = email;
-        Role = UserRole.Admin;
-    }
 }
 
 public class Patient : Person, IPatient {
     protected Patient() {}
     public Patient(string email, UserRole role) {
         base.SetPerson(email, role);
-    }
-    public Patient(int id, string email) {
-        base.Id = id;
-        Email = email;
-        Role = UserRole.Patient;
     }
 }
 public interface IVisitor : IUseCases {}
@@ -73,4 +44,3 @@ public interface IDoctor : IVisitor {}
 public interface IAdministrator : IDoctor {}
 
 public interface IUseCases { }
-

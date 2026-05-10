@@ -7,7 +7,7 @@
     public int personId { get; set; }
     public Person person { get; set; }
 
-    protected Accounts()
+    public Accounts()
     {
     }
 
@@ -15,6 +15,13 @@
     {
         this.Username = username;
         this.Password = password;
+    }
+    
+
+    public Accounts(string username, string password, int personId) {
+        this.Username = username;
+        this.Password = password;
+        this.personId = personId;
     }
 
     public bool Equals(Accounts account)

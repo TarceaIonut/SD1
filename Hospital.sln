@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hospital.SharedLib", "Hospi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountSerivice", "AccountSerivice\AccountSerivice.csproj", "{170B8897-E054-4EA8-996B-67D27F7C24F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonService", "PersonService\PersonService.csproj", "{C39728E4-872F-4E70-A457-EAC0BA522401}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{170B8897-E054-4EA8-996B-67D27F7C24F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{170B8897-E054-4EA8-996B-67D27F7C24F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{170B8897-E054-4EA8-996B-67D27F7C24F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C39728E4-872F-4E70-A457-EAC0BA522401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C39728E4-872F-4E70-A457-EAC0BA522401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C39728E4-872F-4E70-A457-EAC0BA522401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C39728E4-872F-4E70-A457-EAC0BA522401}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
