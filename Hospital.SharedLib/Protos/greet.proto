@@ -12,6 +12,11 @@ service Greeter {
   rpc newAccount(newAccountRequest) returns (newAccountReply);
   rpc deleteById (deleteByIdRequest) returns (deleteByIdReply);
 }
+service Persons{
+  rpc getPersonDataById (getPersonDataByIdRequest) returns (getPersonDataByIdReplay);
+  rpc PersonExistsByEmail (PersonExistsByEmailRequest) returns (PersonExistsByEmailReply);
+  rpc newPerson(newPersonRequest) returns (newPersonReply);
+}
 
 message HelloRequest {
   string name = 1;
@@ -20,16 +25,42 @@ message HelloReply {
   string message = 1;
 }
 
+message getPersonDataByIdRequest{
+  int32 id = 1;
+}
+message getPersonDataByIdReplay{
+  bool found = 4;
+  string email = 1;
+  uint32 Role = 2;
+  string Specialty = 3;
+}
+message PersonExistsByEmailRequest{
+  string email = 1;
+}
+message PersonExistsByEmailReply{
+  bool result = 1;
+}
+
+message newPersonRequest{
+  uint32 role = 1;
+  string email = 2;
+  string speciality = 3;
+}
+message newPersonReply{
+  int32 id = 1;
+}
+
 message ListAllAccountsRequest {
 
 }
-message AccountPrint{
+message AccountFullInfo{
   string username = 1;
   string email = 2;
   uint32 role = 3;
+  int32 id = 4;
 }
 message ListAllAccountsReply{
-  repeated AccountPrint accounts = 1;
+  repeated AccountFullInfo accounts = 1;
 }
 
 message AccountUserPassRequest{
@@ -44,14 +75,18 @@ message getAccountByIdRequest {
   uint32 id = 1;
 }
 message getAccountByIdReply {
-  AccountPrint result = 1;
+  AccountFullInfo result = 1;
 }
 
 message newAccountRequest{
-  AccountPrint account = 1;
+  string username = 1;
+  string password = 2;
+  uint32 role = 3;
+  string speciality = 4;
+  string email = 5;
 }
 message newAccountReply{
-  bool result = 1;
+  int32 id = 1;
 }
 
 message deleteByIdRequest{

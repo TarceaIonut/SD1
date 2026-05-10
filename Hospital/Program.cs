@@ -16,6 +16,7 @@ builder.Services.AddGrpcClient<Greeter.GreeterClient>(o => {
 });
 
 
+builder.Services.AddLogging();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
