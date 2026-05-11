@@ -12,7 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddGrpcClient<Greeter.GreeterClient>(o => {
-    o.Address = new Uri("http://localhost:5294");
+    o.Address = new Uri("http://localhost:5001");
+});
+builder.Services.AddGrpcClient<Persons.PersonsClient>(o => {
+    o.Address = new Uri("http://localhost:5002");
+});
+builder.Services.AddGrpcClient<DoctorCheckupRead.DoctorCheckupReadClient>(o => {
+    o.Address = new Uri("http://localhost:5003");
+});
+builder.Services.AddGrpcClient<DoctorCheckupWrite.DoctorCheckupWriteClient>(o => {
+    o.Address = new Uri("http://localhost:5003");
 });
 
 
@@ -50,11 +59,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.Migrate();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//     dbContext.Database.Migrate();
+// }
 
 app.Services.GetRequiredService<NotificationService>();
 

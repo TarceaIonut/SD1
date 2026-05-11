@@ -23,4 +23,10 @@ public class AccountRepository
         if (_appDbContext.SaveChanges() > 0) return  newA;
         throw new Exception("Account could not be created");
     }
+    public bool AccountExistsUser (string user) => _appDbContext.Accounts.Any(a => a.Username == user);
+
+    public bool RemoveAccount(Accounts a) {
+        _appDbContext.Accounts.Remove(a);
+        return (_appDbContext.SaveChanges() > 1);
+    }
 }

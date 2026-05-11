@@ -1,4 +1,4 @@
-﻿@model List<Pair<Doctor,Account>>
+﻿@model List<Hospital.Controllers.Command.AccountPrint>
 
 @{
     ViewData["Title"] = "Doctors";
@@ -20,9 +20,9 @@
         @foreach (var doctor in Model)
         {
             <tr>
-                <td>@doctor.Second.Username</td>
-                <td>@doctor.First.Email</td>
-                <td>@doctor.First.Specialty</td>
+                <td>@doctor.Username</td>
+                <td>@doctor.Email</td>
+                <td>@doctor.Speciality</td>
             </tr>
         }
     

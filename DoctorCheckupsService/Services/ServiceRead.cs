@@ -1,6 +1,8 @@
-﻿namespace DoctorCheckupsService.Services;
+﻿using AccountDiffService;
 
-public class ServiceRead
+namespace DoctorCheckupsService.Services;
+
+public class ServiceRead : DoctorCheckupRead.DoctorCheckupReadBase
 {
     
 }

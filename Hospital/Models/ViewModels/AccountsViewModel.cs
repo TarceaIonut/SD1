@@ -8,20 +8,20 @@ namespace Hospital.Models.ViewModels;
 
 public class AccountsViewModel {
     [ValidateNever]
-    public List<GetAllAccountsCommand.AccountPrint>? _persons  {get;set;}
+    public List<AccountPrint>? _persons  {get;set;}
     public Person.UserRole? UserRole {get;set;} 
     public DoctorCheckupsFunctions.SortOrder? SortOrder {get;set;}
     public Formats? Format {get;set;}
     public bool Show {get;set;} = true;
 
-    public AccountsViewModel(List<GetAllAccountsCommand.AccountPrint> persons, Person.UserRole? userRole, DoctorCheckupsFunctions.SortOrder? sortOrder,  Formats? format) {
+    public AccountsViewModel(List<AccountPrint> persons, Person.UserRole? userRole, DoctorCheckupsFunctions.SortOrder? sortOrder,  Formats? format) {
         _persons = persons;
         UserRole = userRole;
         SortOrder = sortOrder;
         Format = format;
     }
 
-    public AccountsViewModel(List<GetAllAccountsCommand.AccountPrint> accounts) {
+    public AccountsViewModel(List<AccountPrint> accounts) {
         _persons = accounts;
     }
 

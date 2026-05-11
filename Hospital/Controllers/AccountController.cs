@@ -14,29 +14,45 @@ public class AccountController : Controller {
     private readonly AccountService _service;
     private readonly IUserService  _userService;
     private readonly Greeter.GreeterClient _greeterClient;
-    private readonly ILogger<AccountController> _logger;
-    public AccountController(AccountService service, IUserService userService, Greeter.GreeterClient greeterClient, Logger<AccountController> logger) {
+    private readonly Persons.PersonsClient _personClient;
+    //private readonly ILogger<AccountController> _logger;
+    public AccountController(AccountService service, IUserService userService, Greeter.GreeterClient greeterClient, Persons.PersonsClient personClient ) {
         _userService = userService;
         _service = service;
         _greeterClient = greeterClient;
-        _logger = logger;
+        _personClient = personClient;
     }
 
     [HttpGet]
     public IActionResult SignIn() => View();
+    // [HttpPost]
+    // public async Task<ActionResult> _SignIn(SignInModel model) {
+    //     if (!ModelState.IsValid) return View(model);
+    //     var res = _service.SignIn(model);
+    //     if (res.HasValue()) {
+    //         var person = res.Value!;
+    //         _userService.SetUserId(person.First.Id);
+    //         _userService.SetUser(person.Second.Username);
+    //         _userService.SetEmail(person.First.Email);
+    //         _userService.SetRole(person.First.Role);
+    //     }else {
+    //         var err = res.Error!;
+    //         ModelState.AddModelError("", err);
+    //     }
+    //     return View(model);
+    // }
     [HttpPost]
     public async Task<ActionResult> SignIn(SignInModel model) {
         if (!ModelState.IsValid) return View(model);
-        var res = _service.SignIn(model);
-        if (res.HasValue()) {
-            var person = res.Value!;
-            _userService.SetUserId(person.First.Id);
-            _userService.SetUser(person.Second.Username);
-            _userService.SetEmail(person.First.Email);
-            _userService.SetRole(person.First.Role);
+        var c = new GetAccountCommand(_greeterClient);
+        var p = c.ExecuteAsync(model);
+        if (p.Result == null) {
+            ModelState.AddModelError("", "unknown error");
         }else {
-            var err = res.Error!;
-            ModelState.AddModelError("", err);
+            _userService.SetUserId(p.Result.Id);
+            _userService.SetUser(p.Result.Username);
+            _userService.SetEmail(p.Result.Email);
+            _userService.SetRole(p.Result.Role.ToString());
         }
         return View(model);
     }
@@ -45,17 +61,25 @@ public class AccountController : Controller {
     [HttpPost]
     public async Task<ActionResult> SignUp(SignUpModel model) {
         if (!ModelState.IsValid) return View(model);
-        var res = _service.SignUp(model);
-        if (!res.HasValue()) {
-            ModelState.AddModelError("",  res.Error!);
+        //var res = _service.SignUp(model);
+        if (_userService.GetRole() == Person.UserRole.Doctor) {
+            if (model.specialty == null) {
+                ModelState.AddModelError("", "speciality can not be null");
+                return View(model);
+            }
         }else {
-            var person = res.Value!;
-            _userService.SetUserId(person.First.Id);
-            _userService.SetUser(person.Second.Username);
-            _userService.SetEmail(person.First.Email);
-            _userService.SetRole(person.First.Role);
-            var account = person.Second;
-            //ModelState.AddModelError("",  account + " " + account.person + "\n");
+            model.specialty = "";
+        }
+        
+        var c = new NewAccountCommand(_greeterClient, _personClient);
+        try {
+            int id = await c.ExecuteAsync(model);
+            _userService.SetUserId(id);
+            _userService.SetUser(model.name);
+            _userService.SetEmail(model.email);
+            _userService.SetRole(model.Role);
+        }catch (Exception e) {
+            ModelState.AddModelError("", e.Message);
         }
         return View(model);
     }
@@ -68,14 +92,37 @@ public class AccountController : Controller {
         return RedirectToAction("Index", "Home");
     }
 
+    // public IActionResult _DeleteMyAccount() {
+    //     int? id = HttpContext.Session.GetInt32("UserId");
+    //     if (id == null) {
+    //         ModelState.AddModelError("",  "User id not found");
+    //     }else {
+    //         if (!_service.DeleteAccountId((int)id!)) {
+    //             ModelState.AddModelError("",  "Account not found");
+    //         }
+    //     }
+    //
+    //     return SignOut();
+    // }
     public IActionResult DeleteMyAccount() {
         int? id = HttpContext.Session.GetInt32("UserId");
         if (id == null) {
             ModelState.AddModelError("",  "User id not found");
         }else {
-            if (!_service.DeleteAccountId((int)id!)) {
-                ModelState.AddModelError("",  "Account not found");
+            try
+            {
+                var r = _greeterClient.deleteById(new deleteByIdRequest { Id = (uint)id.Value });
+            
+                if (r == null) {
+                    ModelState.AddModelError("",  "Account not found");
+                }
             }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
+                return SignOut();
+            }
+
         }
 
         return SignOut();
@@ -93,7 +140,7 @@ public class AccountController : Controller {
     public IActionResult Accounts() {
         var role = _userService.GetRole();
         if (role == Person.UserRole.Admin) {
-            var c = new GetAllAccountsCommand(_greeterClient, _logger);
+            var c = new GetAllAccountsCommand(_greeterClient);
             return View(new AccountsViewModel(c.ExecuteAsync().Result ) );
         }
         ModelState.AddModelError("",  "Admin role needed");
@@ -132,7 +179,7 @@ public class AccountController : Controller {
         var model = new AccountsViewModel 
         {
             Show = false, 
-            _persons = new List<GetAllAccountsCommand.AccountPrint>() 
+            _persons = new List<AccountPrint>() 
         };
         return View("Accounts", model);
     }

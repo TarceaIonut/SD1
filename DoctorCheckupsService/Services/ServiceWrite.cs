@@ -1,6 +1,8 @@
-﻿namespace DoctorCheckupsService.Services;
+﻿using AccountDiffService;
 
-public class ServiceWrite
+namespace DoctorCheckupsService.Services;
+
+public class ServiceWrite : DoctorCheckupWrite.DoctorCheckupWriteBase
 {
     
 }

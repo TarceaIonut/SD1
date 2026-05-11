@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
+builder.Services.AddScoped<AccountRepository>();
+builder.Services.AddScoped<AppDbContext>();
 
 builder.Services.AddGrpcClient<Persons.PersonsClient>(o => {
-    o.Address = new Uri("http://localhost:5294");
+    o.Address = new Uri("http://localhost:5002");
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>

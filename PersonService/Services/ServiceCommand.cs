@@ -11,15 +11,11 @@ public class ServiceCommand : Persons.PersonsBase
     public ServiceCommand(AppDbContext dbContext) {
         _dbContext = dbContext;
     }
-    public override Task<getPersonDataByIdReplay> getPersonDataById(getPersonDataByIdRequest request, ServerCallContext context) {
-        var p = _dbContext.GetPersonById(request.Id);
-        if (p == null) {
-            return Task.FromResult(new getPersonDataByIdReplay{Found =  false});
-        }
-        string? s = null;
-        if (p is Doctor) {
-            s = ((Doctor)p).Specialty;
-        }
-        return Task.FromResult(new getPersonDataByIdReplay{Found = true, Email =  p.Email, Role = (uint)p.Role, Specialty = s});
+
+    public override Task<newPersonReply> newPerson(newPersonRequest request, ServerCallContext context) {
+        var newId = _dbContext.NewPerson(new Person
+            {Email = request.Email, Role = (Person.UserRole)request.Role, specialty = request.Speciality});
+        return Task.FromResult(new newPersonReply {Id = newId});
     }
+
 }

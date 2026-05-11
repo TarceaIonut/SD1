@@ -16,8 +16,8 @@ public class ServiceCommand : Greeter.GreeterBase {
         if (_repository.AccountExists(r.Username)) {
             throw new RpcException(new Status(StatusCode.AlreadyExists, "Account already exists: password = " + r.Password));
         }
-        var replyExist = _personsClient.PersonExistsByEmail(new PersonExistsByEmailRequest{Email = r.Email});
-        if (replyExist.Result) {
+        var replyExist = _personsClient.personExistsEmail(new PersonExistsEmailRequest{Email = r.Email});
+        if (replyExist.Exists) {
             throw new RpcException(new Status(StatusCode.AlreadyExists, "Account already exists: email = " + r.Email));
         }
         var idPersonResponse = _personsClient.newPerson(new newPersonRequest{Email = r.Email, Role = r.Role, Speciality = r.Speciality});
