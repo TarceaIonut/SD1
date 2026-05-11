@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Hospital.Controllers.Command;
 using Hospital.Models.HelperStructures;
-using Hospital.Repositories;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Hospital.Models.ViewModels;

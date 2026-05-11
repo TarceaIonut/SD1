@@ -5,13 +5,10 @@ using Hospital.Models;
 using Hospital.Models.HelperStructures;
 using Hospital.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Hospital.Repositories;
-using Hospital.Service;
 
 namespace Hospital.Controllers;
 
 public class AccountController : Controller {
-    private readonly AccountService _service;
     private readonly IUserService  _userService;
     
     private readonly AccountServiceRead.AccountServiceReadClient _accountRead;
@@ -24,13 +21,12 @@ public class AccountController : Controller {
     private readonly DoctorCheckupWrite.DoctorCheckupWriteClient _checkupWrite;
     
     //private readonly ILogger<AccountController> _logger;
-    public AccountController(AccountService service, IUserService userService,  
+    public AccountController(IUserService userService,  
         AccountServiceRead.AccountServiceReadClient accountRead,AccountServiceWrite.AccountServiceWriteClient accountWrite)
     {
         _accountRead = accountRead;
         _accountWrite = accountWrite;
         _userService = userService;
-        _service = service;
     }
 
     [HttpGet]
@@ -159,13 +155,44 @@ public class AccountController : Controller {
         }
         return View("Accounts", model);
     }
-    
+
+    private List<Person> GetAllPersons__(Person.UserRole? role) {
+        var c = new GetAllAccountsCommand(_accountRead);
+        var list = c.ExecuteAsync().Result; 
+        var personsList = new List<Person>();
+
+        foreach (var account in list) {
+            if (role != null && account.role != role.Value) {
+                continue;
+            }
+            Person newPerson = account.role switch {
+                Person.UserRole.Admin => new Admin(account.Email, account.role),
+                Person.UserRole.Doctor => new Doctor(account.Email, account.role, account.Speciality),
+                Person.UserRole.Patient => new Patient(account.Email, account.role),
+                _ => throw new InvalidOperationException($"Unknown role: {account.role}")
+            };
+            newPerson.Account = new Account { Username = account.Username };
+            personsList.Add(newPerson);
+        }
+        return personsList;
+    }
     public List<Person> GetAllPersons_(DoctorCheckupsFunctions.SortOrder? sortOrder, Person.UserRole? role) {
-        var v = role == null ? _service.GetAllPersons() : _service.GetAllPersons(role!.Value);
+        var v = role == null ? GetAllPersons__(null) : GetAllPersons__(role!.Value);
         if (sortOrder != null) {
-            AccountService.SortPersonsByName(v, sortOrder.Value);
+            SortPersonsByName(v, sortOrder.Value);
         }
         return v;
+    }
+    public static void SortPersonsByName(List<Person> list, DoctorCheckupsFunctions.SortOrder order) {
+        switch (order) {
+            case DoctorCheckupsFunctions.SortOrder.ASC :
+                list.Sort((person, person1) =>
+                    String.Compare(person.Account.Username, person1.Account.Username, StringComparison.Ordinal));
+                break;
+            case DoctorCheckupsFunctions.SortOrder.DESC : 
+                list.Sort((person, person1) => String.Compare(person1.Account.Username, person.Account.Username, StringComparison.Ordinal));
+                break;
+        }
     }
 
     public async Task<IActionResult> test_GRPC() {
