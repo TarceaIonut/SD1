@@ -1,4 +1,6 @@
-﻿using Hospital.Repositories;
+﻿using AccountDiffService;
+using Hospital.Controllers.Command;
+using Hospital.Repositories;
 using Hospital.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,13 +8,19 @@ namespace Hospital.Controllers;
 
 public class DoctorsController : Controller
 {
+    private readonly AccountServiceRead.AccountServiceReadClient _accountRead;
     private readonly DoctorsService _service;
 
-    public DoctorsController(DoctorsService service)
+    public DoctorsController(DoctorsService service, AccountServiceRead.AccountServiceReadClient accountRead)
     {
-        this._service = service;
+        _service = service;
+        _accountRead = accountRead;
     }
-    public IActionResult Doctors() {
-        return View(_service.GetAllAccountInfo());
+    public async Task<IActionResult> Doctors()
+    {
+        var c = new DoctorsCommand(_accountRead);
+        var v = c.ExecuteAsync().Result;
+        
+        return View(v);
     }
 }

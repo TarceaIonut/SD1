@@ -6,9 +6,14 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
+builder.Services.AddScoped<AccountRepository>();
+builder.Services.AddScoped<AppDbContext>();
 
-builder.Services.AddGrpcClient<Persons.PersonsClient>(o => {
-    o.Address = new Uri("http://localhost:5294");
+builder.Services.AddGrpcClient<PersonsServiceRead.PersonsServiceReadClient>(o => {
+    o.Address = new Uri("http://localhost:5002");
+});
+builder.Services.AddGrpcClient<PersonsServiceWrite.PersonsServiceWriteClient>(o => {
+    o.Address = new Uri("http://localhost:5002");
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -17,9 +22,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 app.MapGrpcService<ServiceQuery>();
+app.MapGrpcService<ServiceCommand>();
 app.MapGet("/",
     () =>
-        "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+        "Communication with gRPC endpoints must be made through a gRPC client. " +
+        "To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 
 app.Run();

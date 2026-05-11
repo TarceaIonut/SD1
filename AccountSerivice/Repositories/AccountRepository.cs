@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Account.Serivice.Repositories;
 
 public class AccountRepository
@@ -22,5 +24,18 @@ public class AccountRepository
         var newA =  _appDbContext.Add(a).Entity;
         if (_appDbContext.SaveChanges() > 0) return  newA;
         throw new Exception("Account could not be created");
+    }
+    public bool AccountExistsUser (string user) => _appDbContext.Accounts.Any(a => a.Username == user);
+
+    public bool RemoveAccount(Accounts a) {
+        _appDbContext.Accounts.Remove(a);
+        return (_appDbContext.SaveChanges() > 1);
+    }
+    public Accounts? getByName(string username) => _appDbContext.Accounts.FirstOrDefault(a => a.Username == username);
+
+    public bool DeleteId(int id) {
+        var nr = _appDbContext.Accounts.Where(a => a.Id == id).ExecuteDelete() ;
+        _appDbContext.SaveChanges();
+        return nr > 0;
     }
 }

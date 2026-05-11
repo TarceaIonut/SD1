@@ -10,12 +10,21 @@ public class AppDbContext : DbContext
     public Person? GetPersonById(int id) {
         return Persons.FirstOrDefault(p => p.Id == id);
     }
+    public bool PersonExistsByEmail(string email) {
+        return Persons.Any(p => p.Email == email);
+    }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Person>().HasDiscriminator(p => p.Role)
-            .HasValue<Admin>(Person.UserRole.Admin)
-            .HasValue<Patient>(Person.UserRole.Patient)
-            .HasValue<Doctor>(Person.UserRole.Doctor);
+    public int NewPerson(Person p) {
+        var new_p = Persons.Add(p).Entity;
+        SaveChanges();
+        return new_p.Id;
+    }
+
+    public bool RemoveId(int id) {
+        int rowsDeleted = Persons
+            .Where(p => p.Id == id)
+            .ExecuteDelete();
+        SaveChanges();
+        return rowsDeleted > 0;
     }
 }
