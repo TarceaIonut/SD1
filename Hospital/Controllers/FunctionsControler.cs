@@ -1,4 +1,6 @@
 ﻿using System.Text.Json;
+using AccountDiffService;
+using Hospital.Controllers.Command;
 using Hospital.Models;
 using Hospital.Models.HelperStructures;
 using Hospital.Models.ViewModels;
@@ -6,20 +8,28 @@ using Hospital.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Hospital.Models;
-
+using System.Linq;
 namespace Hospital.Controllers;
 
 public class FunctionsController : Controller {
     private readonly FunctionsService _service;
     private readonly IUserService  _userService;
-    public FunctionsController(FunctionsService service,  IUserService userService) {
+    
+    private readonly DoctorCheckupWrite.DoctorCheckupWriteClient _docCheckWrite;
+    private readonly DoctorCheckupRead.DoctorCheckupReadClient _docCheckRead;
+    private readonly AccountServiceRead.AccountServiceReadClient _accountRead;
+    public FunctionsController(FunctionsService service,  IUserService userService, DoctorCheckupWrite.DoctorCheckupWriteClient docCheckWrite,
+        AccountServiceRead.AccountServiceReadClient accountRead, DoctorCheckupRead.DoctorCheckupReadClient docCheckRead) {
         _service = service;
         _userService = userService;
+        _docCheckWrite = docCheckWrite;
+        _accountRead = accountRead;
+        _docCheckRead = docCheckRead;
     }
 
     [HttpGet]
     public IActionResult DoctorCheckups() {
-        var v = _service.GetDoctorCheckups();
+        var v = new DoctorCheckupVewModel(_getAllDoctors(), _getAllPatients());
         var r = _userService.GetRole();
         if (r == Person.UserRole.Admin) v.canSelectDoctor = true;
         else if (r == Person.UserRole.Doctor) v.canSelectDoctor = false;
@@ -28,6 +38,30 @@ public class FunctionsController : Controller {
             return View(DoctorCheckupVewModel.EmptyInstance());
         }
         return View(v);
+    }
+
+    
+    private List<Doctor> _getAllDoctors()
+    {
+        var all = _accountRead.ListAllAccounts(new ListAllAccountsRequest());
+        var res = new List<Doctor>();
+        foreach (var doctor in all.Accounts)
+        {
+            if (doctor != null && (Person.UserRole)doctor.Role == Person.UserRole.Doctor)
+                res.Add(new Doctor{Specialty = doctor.Speciality, Email = doctor.Email, Account = new Account{Username = doctor.Username}});
+        }
+        return res;
+    }
+    private List<Patient> _getAllPatients()
+    {
+        var all = _accountRead.ListAllAccounts(new ListAllAccountsRequest());
+        var res = new List<Patient>();
+        foreach (var patient in all.Accounts)
+        {
+            if (patient != null && (Person.UserRole)patient.Role == Person.UserRole.Patient)
+                res.Add(new Patient{Email = patient.Email, Account = new Account{Username = patient.Username}});
+        }
+        return res;
     }
     [HttpPost]
     public async Task<ActionResult> DoctorCheckups(DoctorCheckupVewModel model) {
@@ -42,11 +76,31 @@ public class FunctionsController : Controller {
             model.DoctorEmail = de!;
             model.DoctorName = dn!;
         }
-        var r = _service.NewCheckup(model);
-        if (!r.HasValue()) {
-            ModelState.AddModelError("", r.Error!);
+        if (_userService.GetRole() == Person.UserRole.Patient)
+        {
+            var de = _userService.GetEmail();
+            var dn =  _userService.GetUser();
+            if (de == null || dn == null) {
+                ModelState.AddModelError("",  "UserEmail/UserName undefined = " + de + " / " + dn);
+                return View(model);
+            }
+            model.PatientEmail = de!;
+            model.PatientName = dn!;
         }
-        var v = _service.GetDoctorCheckups();
+        var c = new NewCheckupCommand(_docCheckWrite);
+        try
+        {
+            var r = c.ExecuteAsync(model);
+            if (!r.Result)
+                ModelState.AddModelError("", "could not delete");
+        }
+        catch (Exception e)
+        {
+            ModelState.AddModelError("", e.Message);
+        }
+        
+        //var v = _service.GetDoctorCheckups();
+        var v = new DoctorCheckupVewModel(_getAllDoctors(), _getAllPatients());
         var res = _userService.GetRole();
         if (res == Person.UserRole.Admin) v.canSelectDoctor = true;
         else if (res == Person.UserRole.Doctor) v.canSelectDoctor = false;
@@ -62,6 +116,20 @@ public class FunctionsController : Controller {
         return View(new DoctorCheckupsFunctions(DoctorCheckupListP(), _userService.GetRole() == Person.UserRole.Admin));
     }
 
+    private List<DoctorCheckups> _doctorCheckupsListAll() {
+        var c = new ListAllCommand(_docCheckRead);
+        return c.ExecuteAsync().Result;
+    }
+
+    private List<DoctorCheckups> _doctorCheckupsListPatient(string name, string email)
+    {
+        return _doctorCheckupsListAll().Where(d => d.Patient.Email == email && d.Patient.Account.Username == name)
+            .ToList();
+    }
+    private List<DoctorCheckups> _doctorCheckupsListDoctor(string name, string email) {
+        return _doctorCheckupsListAll().Where(d => d.Doctor.Email == email && d.Doctor.Account.Username == name)
+            .ToList();
+    }
     private List<DoctorCheckups> DoctorCheckupListP() {
         var r = _userService.GetRole();
         if (r == null) {
@@ -69,7 +137,7 @@ public class FunctionsController : Controller {
             return new List<DoctorCheckups>();
         }
         if (r == Person.UserRole.Admin) {
-            return _service.DoctorCheckupsList();
+            return _doctorCheckupsListAll();
         }else if (r == Person.UserRole.Doctor) {
             var de = _userService.GetEmail();
             var dn =  _userService.GetUser();
@@ -77,7 +145,7 @@ public class FunctionsController : Controller {
                 ModelState.AddModelError("",  "UserEmail/UserName undefined = " + de + " / " + dn);
                 return new List<DoctorCheckups>();
             }
-            var res = _service.DoctorCheckupsListDoctor(FromUserEmail(de, dn));
+            var res = _doctorCheckupsListDoctor(dn, de);
             return res;
         }else if (r == Person.UserRole.Patient) {
             var de = _userService.GetEmail();
@@ -86,9 +154,9 @@ public class FunctionsController : Controller {
                 ModelState.AddModelError("",  "UserEmail/UserName undefined = " + de + " / " + dn);
                 return new List<DoctorCheckups>();
             }
-            return _service.DoctorCheckupsListPatient(PFromUserEmail(de, dn));
+            return _doctorCheckupsListPatient(dn, de);
         }
-        return _service.DoctorCheckupsList();
+        return _doctorCheckupsListAll();
     }
 
     [HttpPost]
@@ -139,9 +207,11 @@ public class FunctionsController : Controller {
             ModelState.AddModelError("", s);
         }else {
             model.AppointmentDate = DateTime.SpecifyKind(model.AppointmentDate!.Value, DateTimeKind.Utc);
-            var res = _service.DoctorCheckupsUpdate(model.Id!.Value, model.Description!, model.AppointmentDate!.Value);
-            if (res != null) {
-                ModelState.AddModelError("", res);
+            //var res = _service.DoctorCheckupsUpdate(model.Id!.Value, model.Description!, model.AppointmentDate!.Value);
+            var c = new UpdateCommand(_docCheckWrite);
+            var r = await c.ExecuteAsync(model);
+            if (r == false) {
+                ModelState.AddModelError("", "update failed");
             }else {
                 model.DoctorCheckups = DoctorCheckupListP();
             }
@@ -159,7 +229,10 @@ public class FunctionsController : Controller {
     private string? DoctorCheckupDeleteP(DoctorCheckupsFunctions model) {
         var id = model.Id;
         if (model.Id == null) return "Id of a checkup required\n";
-        if (_service.DoctorCheckupsDelete(id!.Value)) return null;
+        //if (_service.DoctorCheckupsDelete(id!.Value)) return null;
+        var c = new DeleteCommand(_docCheckWrite);
+        if (c.ExecuteAsync(id.Value).Result)
+            return null;
         return "Delete cound not be made: IDK why";
     }
     private static Doctor FromUserEmail(string email, string user) {

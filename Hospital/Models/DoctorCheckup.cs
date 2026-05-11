@@ -14,7 +14,7 @@ public class DoctorCheckups
     public DateTime AppointmentDate { get; set; }
     
     public string Description { get; set; }
-    protected DoctorCheckups() { }
+    public DoctorCheckups() { }
 
     public DoctorCheckups(Patient patient, Doctor doctor, DateTime appointmentDate, string description) {
         Doctor = doctor;

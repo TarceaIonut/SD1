@@ -35,8 +35,17 @@ public class ServiceQuery : AccountServiceRead.AccountServiceReadBase {
         return Task.FromResult(new AccountExistsUserReply{Exists = _repository.AccountExistsUser(request.Username)});
     }
 
-    public override Task<getAccountByIdReply> getAccountById(getAccountByIdRequest r, ServerCallContext context) {
-        return Task.FromResult(new getAccountByIdReply());
+    public override Task<getAccountByIdReply> getAccountById(getAccountByIdRequest request, ServerCallContext context) {
+        var account = _repository.GetAccountById((int)request.Id);
+        if (account == null) {
+            throw new RpcException(new Status(StatusCode.NotFound, "Account Not found"));
+        }
+        var person = _personsClientRead.getPersonDataById(new getPersonDataByIdRequest {Id = account.personId} );
+        if (person == null) {
+            throw new RpcException(new Status(StatusCode.NotFound, "Person not found"));
+        }
+        return Task.FromResult(new getAccountByIdReply{Result = new AccountFullInfo
+            {Email = person.Email, Id =  account.Id, Username = account.Username, Role = person.Role}});
     }
     public override Task<getAccountReply> getAccount(getAccountRequest request, ServerCallContext context) {
         var account = _repository.GetAccountByNamePassword(request.Username, request.Password);

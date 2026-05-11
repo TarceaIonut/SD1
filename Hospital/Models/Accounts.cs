@@ -8,7 +8,7 @@
         public int personId { get; set; }
         public Person person { get; set; }
         
-        protected Account() {}
+        public Account() {}
 
         public Account(string username, string password)
         {

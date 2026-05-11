@@ -19,6 +19,8 @@ public class ServiceWrite : DoctorCheckupWrite.DoctorCheckupWriteBase
         if (dc == null) {
             throw new RpcException(new Status(StatusCode.NotFound, "doctor checkup Not found"));
         }
+        dc.Description = request.Description;
+        dc.AppointmentDate = request.CheckupDate.ToDateTime();
         _dbContext.UpdateDoctorCheckup(dc);
         return Task.FromResult(new UpdateDoctorCheckupResponse());
     }
