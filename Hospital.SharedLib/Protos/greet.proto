@@ -6,18 +6,21 @@ package greet;
 
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply);
+}
+message getAccountByUserEmailRequest{
+  string email = 1;
+  string user = 2;
+}
+service AccountServiceRead{
   rpc ListAllAccounts (ListAllAccountsRequest) returns (ListAllAccountsReply);
   rpc AccountExistsUser (AccountExistsUserRequest) returns (AccountExistsUserReply);
   rpc getAccountById (getAccountByIdRequest) returns (getAccountByIdReply);
-  rpc newAccount(newAccountRequest) returns (newAccountReply);
-  rpc deleteById (deleteByIdRequest) returns (deleteByIdReply);
   rpc getAccount (getAccountRequest) returns (getAccountReply);
-}
-service AccountServiceRead{
-  
+  rpc getAccountByUserEmail (getAccountByUserEmailRequest) returns (getAccountReply);
 }
 service AccountServiceWrite{
-  
+  rpc newAccount(newAccountRequest) returns (newAccountReply);
+  rpc deleteById (deleteByIdRequest) returns (deleteByIdReply);
 }
 message getAccountRequest{
   string username = 1;
@@ -27,18 +30,18 @@ message getAccountReply {
   AccountFullInfo result = 1;
 }
 service Persons{
-  rpc getPersonDataById (getPersonDataByIdRequest) returns (getPersonDataByIdReplay);
-  rpc personExistsEmail (PersonExistsEmailRequest) returns (PersonExistsEmailReply);
-  rpc newPerson(newPersonRequest) returns (newPersonReply);
-  rpc findPersonById(findPersonByIdRequest) returns (findPersonByIdReply);
-  rpc getPersonByEmail(GetPersonByEmailRequest) returns (GetPersonByEmailReply);
-  rpc removePersonById(removePersonByIdRequest) returns (removePersonByIdResponse);
+ 
+
 }
 service PersonsServiceRead{
-
+  rpc getPersonDataById (getPersonDataByIdRequest) returns (getPersonDataByIdReplay);
+  rpc personExistsEmail (PersonExistsEmailRequest) returns (PersonExistsEmailReply);
+  rpc findPersonById(findPersonByIdRequest) returns (findPersonByIdReply);
+  rpc getPersonByEmail(GetPersonByEmailRequest) returns (GetPersonByEmailReply);
 }
 service PersonsServiceWrite{
-
+  rpc newPerson(newPersonRequest) returns (newPersonReply);
+  rpc removePersonById(removePersonByIdRequest) returns (removePersonByIdResponse);
 }
 message removePersonByIdRequest{
   int32 id = 1;
@@ -140,14 +143,41 @@ message deleteByIdReply{
 }
 
 service DoctorCheckupRead{
-  
-}
-service DoctorCheckupWrite{
-  rpc GetAllDoctorCheckups (GetAllRequest) returns ();
+  rpc GetAllDoctorCheckups (GetAllRequest) returns (GetAllDoctorCheckupsReceive);
 }
 import "google/protobuf/timestamp.proto";
+service DoctorCheckupWrite{
+  rpc Update(UpdateDoctorCheckupRequest) returns (UpdateDoctorCheckupResponse);
+  rpc Delete(deleteRequest) returns (deleteResponse);
+  rpc Insert(InsertCheckupRequest) returns (InsertCheckupResponse);
+}
+message InsertCheckupRequest{
+  string description = 1;
+  string patient_email = 2;
+  string patient_name = 3;
+  string doctor_email = 4;
+  string doctor_name = 5;
+
+  google.protobuf.Timestamp checkup_date = 7;
+}
+message InsertCheckupResponse{
+  int32 id = 1;
+}
+message deleteRequest{
+  int32 id = 1;
+}
+message deleteResponse{
+  
+}
+message UpdateDoctorCheckupRequest{
+  int32 id = 1;
+  string description = 3;
+  google.protobuf.Timestamp checkup_date = 2;
+}
+message UpdateDoctorCheckupResponse{ }
+
 message GetAllRequest{ }
-message DoctorCheckup{
+message DoctorCheckupSend{
   int32 id = 6;
   
   string description = 1;
@@ -158,6 +188,6 @@ message DoctorCheckup{
 
   google.protobuf.Timestamp checkup_date = 7;
 }
-message GetAllDoctorCheckups{
-  repeated DoctorCheckup doctor_checkups = 1;
+message GetAllDoctorCheckupsReceive{
+  repeated DoctorCheckupSend doctor_checkups = 1;
 }

@@ -1,6 +1,7 @@
 ﻿using AccountDiffService;
 using DoctorCheckupsService.Models;
 using Microsoft.EntityFrameworkCore;
+using DoctorCheckup = DoctorCheckupsService.Models.DoctorCheckup;
 
 namespace DoctorCheckupsService.Repositories;
 
@@ -16,9 +17,7 @@ public class AppDbContext : DbContext
     }
 
     public bool deleteById(int id) {
-        int rowsDeleted = DoctorCheckups
-            .Where(p => p.Id == id)
-            .ExecuteDelete();
+        int rowsDeleted = DoctorCheckups.Where(p => p.Id == id).ExecuteDelete();
         SaveChanges();
         return rowsDeleted > 0;
     }

@@ -8,12 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddGrpc();
 
-var app = builder.Build();
-
-builder.Services.AddGrpcClient<Greeter.GreeterClient>(o => {
+builder.Services.AddGrpcClient<AccountServiceRead.AccountServiceReadClient>(o => {
     o.Address = new Uri("http://localhost:5001");
 });
-builder.Services.AddGrpcClient<Persons.PersonsClient>(o => {
+builder.Services.AddGrpcClient<AccountServiceWrite.AccountServiceWriteClient>(o => {
+    o.Address = new Uri("http://localhost:5001");
+});
+builder.Services.AddGrpcClient<PersonsServiceRead.PersonsServiceReadClient>(o => {
+    o.Address = new Uri("http://localhost:5002");
+});
+builder.Services.AddGrpcClient<PersonsServiceWrite.PersonsServiceWriteClient>(o => {
     o.Address = new Uri("http://localhost:5002");
 });
 
@@ -23,6 +27,8 @@ builder.Services.AddScoped<AppDbContext>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=doctor_checkup.db"));
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<ServiceRead>();

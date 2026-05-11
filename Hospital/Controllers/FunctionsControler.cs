@@ -59,7 +59,6 @@ public class FunctionsController : Controller {
 
     [HttpGet]
     public IActionResult DoctorCheckupList() {
-        //ModelState.AddModelError("", JsonSerializer.Serialize(_service.DoctorCheckupsList()));
         return View(new DoctorCheckupsFunctions(DoctorCheckupListP(), _userService.GetRole() == Person.UserRole.Admin));
     }
 

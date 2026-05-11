@@ -16,6 +16,7 @@ var app = builder.Build();
 
 
 app.MapGrpcService<ServiceQuery>();
+app.MapGrpcService<ServiceCommand>();
 //app.MapGrpcService<ServiceCommand>();
 app.MapGet("/",
     () =>

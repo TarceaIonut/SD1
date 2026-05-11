@@ -11,10 +11,16 @@ using AccountDiffService;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddGrpcClient<Greeter.GreeterClient>(o => {
+builder.Services.AddGrpcClient<AccountServiceRead.AccountServiceReadClient>(o => {
     o.Address = new Uri("http://localhost:5001");
 });
-builder.Services.AddGrpcClient<Persons.PersonsClient>(o => {
+builder.Services.AddGrpcClient<AccountServiceWrite.AccountServiceWriteClient>(o => {
+    o.Address = new Uri("http://localhost:5001");
+});
+builder.Services.AddGrpcClient<PersonsServiceRead.PersonsServiceReadClient>(o => {
+    o.Address = new Uri("http://localhost:5002");
+});
+builder.Services.AddGrpcClient<PersonsServiceWrite.PersonsServiceWriteClient>(o => {
     o.Address = new Uri("http://localhost:5002");
 });
 builder.Services.AddGrpcClient<DoctorCheckupRead.DoctorCheckupReadClient>(o => {

@@ -4,7 +4,7 @@ namespace PersonService.Services;
 
 using Grpc.Core;
 using AccountDiffService;
-public class ServiceCommand : Persons.PersonsBase
+public class ServiceCommand : PersonsServiceWrite.PersonsServiceWriteBase
 {
     private readonly AppDbContext _dbContext;
 
@@ -16,6 +16,10 @@ public class ServiceCommand : Persons.PersonsBase
         var newId = _dbContext.NewPerson(new Person
             {Email = request.Email, Role = (Person.UserRole)request.Role, specialty = request.Speciality});
         return Task.FromResult(new newPersonReply {Id = newId});
+    }
+    public override Task<removePersonByIdResponse> removePersonById(removePersonByIdRequest request, ServerCallContext context)
+    {
+        return Task.FromResult(new removePersonByIdResponse{Deleted = _dbContext.RemoveId(request.Id)});
     }
 
 }

@@ -5,13 +5,13 @@ namespace Hospital.Controllers.Command;
 
 public class DoctorsCommand : ICommand<List<AccountPrint>>
 {
-    private readonly Greeter.GreeterClient _grpcClient;
-    public DoctorsCommand(Greeter.GreeterClient grpcClient) {
-        _grpcClient = grpcClient;
+    private readonly AccountServiceRead.AccountServiceReadClient _accountRead;
+    public DoctorsCommand( AccountServiceRead.AccountServiceReadClient accountRead) {
+        _accountRead = accountRead;
     }
     public async Task<List<AccountPrint>> ExecuteAsync()
     {
-        var v = _grpcClient.ListAllAccounts(new ListAllAccountsRequest());
+        var v = _accountRead.ListAllAccounts(new ListAllAccountsRequest());
         var list = new List<AccountPrint>(v.Accounts.Count);
         foreach (AccountFullInfo account in v.Accounts)
         {
