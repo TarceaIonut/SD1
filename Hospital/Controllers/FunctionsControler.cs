@@ -4,23 +4,17 @@ using Hospital.Controllers.Command;
 using Hospital.Models;
 using Hospital.Models.HelperStructures;
 using Hospital.Models.ViewModels;
-using Hospital.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Hospital.Models;
-using System.Linq;
 namespace Hospital.Controllers;
 
 public class FunctionsController : Controller {
-    private readonly FunctionsService _service;
     private readonly IUserService  _userService;
     
     private readonly DoctorCheckupWrite.DoctorCheckupWriteClient _docCheckWrite;
     private readonly DoctorCheckupRead.DoctorCheckupReadClient _docCheckRead;
     private readonly AccountServiceRead.AccountServiceReadClient _accountRead;
-    public FunctionsController(FunctionsService service,  IUserService userService, DoctorCheckupWrite.DoctorCheckupWriteClient docCheckWrite,
+    public FunctionsController(IUserService userService, DoctorCheckupWrite.DoctorCheckupWriteClient docCheckWrite,
         AccountServiceRead.AccountServiceReadClient accountRead, DoctorCheckupRead.DoctorCheckupReadClient docCheckRead) {
-        _service = service;
         _userService = userService;
         _docCheckWrite = docCheckWrite;
         _accountRead = accountRead;
@@ -174,18 +168,41 @@ public class FunctionsController : Controller {
     [HttpPost]
     public async Task<ActionResult> DoctorCheckupSort(DoctorCheckupsFunctions model) {
         model.DoctorCheckups = DoctorCheckupListP();
-        var s = _service.DoctorCheckupsSort(model.DoctorCheckups, model.sortOrder, model.sortOn);
+        var s = DoctorCheckupsSort(model.DoctorCheckups, model.sortOrder, model.sortOn);
         if (s != null) {
             ModelState.AddModelError("", s!);
         }
         return View("DoctorCheckupList", model);
     }
+    public string? DoctorCheckupsSort(List<DoctorCheckups> list, DoctorCheckupsFunctions.SortOrder? sortOrder,
+        DoctorCheckupsFunctions.SortOn? sortOn) {
+        if (sortOrder == null) return "sortOrder is null";
+        if (sortOn == null) return "sortOn is null";
+        switch (sortOn, sortOrder) {
+            case (DoctorCheckupsFunctions.SortOn.DATE, DoctorCheckupsFunctions.SortOrder.ASC):
+                list.Sort((x, y) => x.AppointmentDate.CompareTo(y.AppointmentDate));
+                break;
 
+            case (DoctorCheckupsFunctions.SortOn.DATE, DoctorCheckupsFunctions.SortOrder.DESC):
+                list.Sort((x, y) => y.AppointmentDate.CompareTo(x.AppointmentDate));
+                break;
+            case (DoctorCheckupsFunctions.SortOn.NAME, DoctorCheckupsFunctions.SortOrder.ASC):
+                list.Sort((x, y) => 
+                    String.Compare(x.Patient.Account.Username,y.Patient.Account.Username, StringComparison.Ordinal));
+                break;
+            case (DoctorCheckupsFunctions.SortOn.NAME, DoctorCheckupsFunctions.SortOrder.DESC):
+                list.Sort((x, y) => 
+                    String.Compare(y.Patient.Account.Username,x.Patient.Account.Username, StringComparison.Ordinal));
+                break;
+            
+        }
+        return null;
+    }
     [HttpPost]
     public async Task<ActionResult> Export(DoctorCheckupsFunctions model) {
         model.DoctorCheckups = DoctorCheckupListP();
         if (model.sortOn != null && model.sortOrder != null) {
-            var s = _service.DoctorCheckupsSort(model.DoctorCheckups, model.sortOrder, model.sortOn);
+            var s = DoctorCheckupsSort(model.DoctorCheckups, model.sortOrder, model.sortOn);
             if (s != null) {
                 ModelState.AddModelError("", s!);
             }

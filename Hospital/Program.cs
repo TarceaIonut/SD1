@@ -1,10 +1,6 @@
 
-using Microsoft.EntityFrameworkCore;
-using Hospital.Controllers;
 using Hospital.Models;
-using Hospital.Repositories;
 using Hospital.Service;
-using Hospital.SharedLib;
 
 using AccountDiffService;
 
@@ -47,29 +43,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<DoctorRepository>();
-builder.Services.AddScoped<AccountRepository>();
-builder.Services.AddScoped<FunctionsRepository>();
-builder.Services.AddScoped<AccountService>();
-builder.Services.AddScoped<DoctorsService>();
-builder.Services.AddScoped<FunctionsService>();
-builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddSingleton<NotificationService>();
-
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseSqlite("Data Source=hospital.db"),ServiceLifetime.Singleton);
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(DatabaseConnectionManager.Instance.ConnectionString));
-
 
 
 var app = builder.Build();
-
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//     dbContext.Database.Migrate();
-// }
 
 app.Services.GetRequiredService<NotificationService>();
 
