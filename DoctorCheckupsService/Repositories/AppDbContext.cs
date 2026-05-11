@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public int AddDoctorCheckup(DoctorCheckup doctorCheckup)
     {
         var newDc = DoctorCheckups.Add(doctorCheckup).Entity;
+        SaveChanges();
         return newDc.Id;
     }
 

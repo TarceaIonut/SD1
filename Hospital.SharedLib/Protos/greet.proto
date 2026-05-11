@@ -187,6 +187,8 @@ message DoctorCheckupSend{
   string doctor_name = 5;
 
   google.protobuf.Timestamp checkup_date = 7;
+  
+  string speciality = 8;
 }
 message GetAllDoctorCheckupsReceive{
   repeated DoctorCheckupSend doctor_checkups = 1;
