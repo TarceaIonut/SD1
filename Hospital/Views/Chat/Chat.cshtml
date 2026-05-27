@@ -1,0 +1,130 @@
+﻿    @model Hospital.Models.ViewModels.ChatView
+    @inject Hospital.Models.IUserService UserService
+    @{
+        ViewData["Title"] = "Chat";
+        
+        int? currentUserId = UserService.GetUserId();
+        int? activeChatPartnerId = UserService.GetMessageUserId();
+        
+        if (currentUserId == null) {
+            ViewData.ModelState.AddModelError("", "System Error: You are not signed in. Real-time chat is disabled.");
+        }else if (activeChatPartnerId == null) {
+            ViewData.ModelState.AddModelError("", "Notice: No active chat partner selected. Please select an account to start messaging.");
+        }
+    }
+    <h1>@ViewData["Title"]</h1>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    @if (currentUserId != null)
+    {
+        <div class="container-fluid">
+            <div class="row align-items-start">
+                <div class="col-md-4">
+                    <table class="accounts table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var account in @Model.Accounts)
+                        {
+                            <tr>
+                                <th>@account.role.ToString()</th>
+                                <th>@account.Username</th>
+                                <th>@account.Email</th>
+                                <td>
+                                    <form asp-controller="Chat" asp-action="ShowMessages" asp-route-id="@account.Id" method="get">
+                                        <button type="submit" class="btn btn-primary btn-sm">Chat</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                    <form asp-controller="Chat" asp-action="NewConversation" method="post">
+                        <div class="input">
+                            <label asp-for="UserName">User</label>
+                            <input asp-for="UserName" name="UserName" placeholder="Enter username" required/>
+                        </div>
+                        <div class="input">
+                            <label asp-for="MessageNewUser">Message</label>
+                            <input asp-for="MessageNewUser" placeholder="Enter message" required/>
+                        </div>
+                        <button type="submit" class="button-Sign-In">Message New Person</button>
+                    </form>
+                </div>
+                @if (activeChatPartnerId != null)
+                {
+                    <div class="col-md-4">
+                        <div id="messageContainer">
+                            @foreach (var messages in @Model.Messages)
+                            {
+                                <div class="mb-2 p-2 border rounded bg-light">
+                                    <small class="text-muted d-block">@messages.Date.ToString()</small>
+                                    <p class="mb-0">@messages.Message</p>
+                                </div>
+                            }
+                        </div>
+
+                        <form id="replyMessageForm" asp-controller="Chat" asp-action="NewMessage" method="post">
+                            <div class="input">
+                                <label asp-for="MessageCurrentUser">Message</label>
+                                <input asp-for="MessageCurrentUser" placeholder="Enter message" required/>
+                            </div>
+                            <button type="submit" class="button-Sign-In">Message Person</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+        
+        const currentUserId = parseInt("@(currentUserId ?? 0)");
+        const activeChatPartnerId = parseInt("@(activeChatPartnerId ?? 0)");
+        
+        connection.on("ReceiveMessage", function (senderId, message, dateString) {
+            if (senderId === activeChatPartnerId || senderId === currentUserId) {
+                const messageHtml = `
+                    <div class="mb-2 p-2 border rounded bg-light">
+                        <small class="text-muted d-block">${dateString}</small>
+                        <p class="mb-0">${message}</p>
+                    </div>`;
+                
+                $("#messageContainer").append(messageHtml);
+                
+                const container = document.getElementById("messageContainer");
+                if (container) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }
+        });
+        
+        if (currentUserId > 0) {
+            connection.start().then(function () {
+                connection.invoke("JoinChatSession", currentUserId.toString());
+            }).catch(err => console.error(err.toString()));
+        }
+        
+        $("#replyMessageForm").submit(function (e) {
+            e.preventDefault(); 
+            const form = $(this);
+
+            $.post(form.attr('action'), form.serialize())
+                .done(function () {
+                    $("#MessageCurrentUser").val(''); 
+                })
+                .fail(function (xhr) {
+                    alert("Error sending message: " + xhr.responseText);
+                });
+        });
+    </script>
+}

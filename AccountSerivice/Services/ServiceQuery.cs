@@ -77,6 +77,13 @@ public class ServiceQuery : AccountServiceRead.AccountServiceReadBase {
             {Email = person.Email, Id =  account.Id, Username = account.Username, Role = person.Role}});
     }
 
-
-    
+    public override Task<getAccountReply> getByUser(AccountExistsUserRequest request, ServerCallContext context)
+    {
+        var a = _repository.getByName(request.Username);
+        if (a == null) {
+            throw new RpcException(new Status(StatusCode.NotFound, "Account Not found"));
+        }
+        return Task.FromResult(new getAccountReply{Result = new AccountFullInfo
+            {Id = a.Id}});
+    }
 }

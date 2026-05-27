@@ -10,6 +10,7 @@ public class AccountPrint {
     public string Username { get; set; }
     public Person.UserRole role { get; set; }
     public string? Speciality { get; set; }
+    public int Id = -1;
     public AccountPrint(string email, string username, Person.UserRole role) {
         Email = email;
         Username = username;

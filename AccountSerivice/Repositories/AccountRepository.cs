@@ -38,5 +38,4 @@ public class AccountRepository
         _appDbContext.SaveChanges();
         return nr > 0;
     }
-    
 }
