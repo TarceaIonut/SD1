@@ -10,6 +10,8 @@ public interface IUserService {
     public void SetUser(string user);
     public int? GetUserId();
     public void SetUserId(int id);
+    public void SetMessageUserId(int id);
+    public int? GetMessageUserId();
 
     public void SetInformation(int id, string role, string email, string user) {
         SetUserId(id);
@@ -36,4 +38,6 @@ public class UserService : IUserService {
     public void SetUser(string user) =>  _context.HttpContext?.Session.SetString("UserName", user);
     public int? GetUserId() => _context.HttpContext?.Session.GetInt32("UserId");
     public void SetUserId(int id) =>  _context.HttpContext?.Session.SetInt32("UserId", id);
+    public void SetMessageUserId(int id) => _context.HttpContext?.Session.SetInt32("MessageUserId", id);
+    public int? GetMessageUserId() => _context.HttpContext?.Session.GetInt32("MessageUserId");
 }

@@ -25,6 +25,13 @@ builder.Services.AddGrpcClient<DoctorCheckupRead.DoctorCheckupReadClient>(o => {
 builder.Services.AddGrpcClient<DoctorCheckupWrite.DoctorCheckupWriteClient>(o => {
     o.Address = new Uri("http://localhost:5003");
 });
+builder.Services.AddGrpcClient<ChatRead.ChatReadClient>(o => {
+    o.Address = new Uri("http://localhost:5004");
+});
+builder.Services.AddGrpcClient<ChatWrite.ChatWriteClient>(o => {
+    o.Address = new Uri("http://localhost:5004");
+});
+
 
 
 builder.Services.AddLogging();
@@ -44,9 +51,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<NotificationService>();
-
+builder.Services.AddSignalR();
 
 var app = builder.Build();
+
+app.MapHub<Hospital.Hubs.ChatHub>("/chatHub");
 
 app.Services.GetRequiredService<NotificationService>();
 

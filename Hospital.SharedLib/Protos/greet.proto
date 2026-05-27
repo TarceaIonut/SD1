@@ -17,6 +17,7 @@ service AccountServiceRead{
   rpc getAccountById (getAccountByIdRequest) returns (getAccountByIdReply);
   rpc getAccount (getAccountRequest) returns (getAccountReply);
   rpc getAccountByUserEmail (getAccountByUserEmailRequest) returns (getAccountReply);
+  rpc getByUser (AccountExistsUserRequest) returns (getAccountReply);
 }
 service AccountServiceWrite{
   rpc newAccount(newAccountRequest) returns (newAccountReply);
@@ -192,4 +193,37 @@ message DoctorCheckupSend{
 }
 message GetAllDoctorCheckupsReceive{
   repeated DoctorCheckupSend doctor_checkups = 1;
+}
+
+service ChatRead{
+  rpc GetAllCurrentAccounts(GetAllCurrentAccountsRequest) returns (GetAllCurrentAccountsResponse);
+  rpc GetChats(getChatsRequest) returns (GetChatsResponce);
+}
+message getChatsRequest{
+  int32 initiatorId = 1;
+  int32 receiverId = 2;
+}
+message ChatMessage{
+  string message = 1;
+  google.protobuf.Timestamp date = 2;
+}
+message GetChatsResponce{
+  repeated ChatMessage messages = 1;
+}
+message GetAllCurrentAccountsResponse{
+  repeated AccountFullInfo accounts = 1;
+}
+message GetAllCurrentAccountsRequest{
+  int32 id = 1;
+}
+service ChatWrite{
+  rpc writeMessage(writeMessageRequest) returns (writeMessageResponse);
+}
+message writeMessageResponse{
+  
+}
+message writeMessageRequest{
+  int32 initiatorId = 1;
+  int32 receiverId = 2;
+  string message = 3;
 }
