@@ -47,13 +47,28 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
-
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<NotificationService>();
 builder.Services.AddSignalR();
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+
 var app = builder.Build();
+
+var supportedCultures = new[] { "en-US", "ro-RO" };
+
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
+
 
 app.MapHub<Hospital.Hubs.ChatHub>("/chatHub");
 

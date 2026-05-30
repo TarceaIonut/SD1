@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Language";
+}
+<form asp-controller="Language" asp-action="SetLanguage" method="post" class="form-inline">
+    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+    
+    <select name="culture" onchange="this.form.submit();" class="form-select form-select-sm">
+        <option value="">Select Language...</option>
+        <option value="en-US">English</option>
+        <option value="ro-RO">Română</option>
+    </select>
+</form>
