@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@{
+    ViewData["Title"] = Localizer["Home Page"];
 }
 
 <div class="text-center">

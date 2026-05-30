@@ -1,7 +1,9 @@
-﻿@model List<Hospital.Controllers.Command.AccountPrint>
-
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Hospital
+@model List<Hospital.Controllers.Command.AccountPrint>
 @{
-    ViewData["Title"] = "Doctors";
+    ViewData["Title"] = Localizer["Doctors"];
 }
 
 <!DOCTYPE html>
@@ -11,9 +13,9 @@
 <table class="accounts table">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Speciality</th>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Email"]</th>
+            <th>@Localizer["Speciality"]</th>
         </tr>
     </thead>
     <tbody>

@@ -1,0 +1,17 @@
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@{
+    ViewData["Title"] = Localizer["Language"];
+}
+@model Hospital.Models.ViewModels.LanguageView
+<label>@Model.Language</label>
+<form asp-controller="Language" asp-action="SetLanguage" method="post" class="form-inline">
+    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+    
+    <select name="culture" onchange="this.form.submit();" class="form-select">
+        <option value="">@Localizer["Select Language"]</option>
+        <option value="en-US">English</option>
+        <option value="ro-RO">Română</option>
+    </select>
+</form>

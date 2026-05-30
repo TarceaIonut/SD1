@@ -1,42 +1,44 @@
-﻿@model Hospital.Models.ViewModels.SignUpModel
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Hospital.Models.ViewModels.SignUpModel
 @{
-    ViewData["Title"] = "Sign Up";
+    ViewData["Title"] = Localizer["Sign Up"];
 }
 
 <!DOCTYPE html>
-<h1>@ViewData["Title"]</h1>
 <html lang="en">
 <body>
+<h1>@ViewData["Title"]</h1>
 
 <div class="sign-up-card">
     <div asp-validation-summary="All" class="text-danger"></div>
     <form asp-controller="Account" asp-action="SignUp" method="post">
         <div class="input">
-            <label asp-for="@Model.name">Username</label>
-            <input asp-for="@Model.name" placeholder="Enter username"/>
+            <label asp-for="@Model.name">@Localizer["Username"]</label>
+            <input asp-for="@Model.name" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Username"].Value}")"/>
         </div>
         <div class="input">
-            <label asp-for="password">Password</label>
-            <input asp-for="password" placeholder="Enter password"/>
+            <label asp-for="password">@Localizer["Password"]</label>
+            <input asp-for="password" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Password"].Value}")"/>
         </div>
         <div class="form-group">
-            <label asp-for="Role" class="control-label"></label>
+            <label asp-for="Role" class="control-label">@Localizer["Role"]</label>
             <select asp-for="Role" 
                     class="form-control" 
-                    asp-items="Html.GetEnumSelectList<Hospital.Models.Person.UserRole>()">
-                <option value="">-- Select Role --</option>
+                    asp-items="Html.GetEnumSelectList<Hospital.Models.Person.UserRole>().Select(item => new SelectListItem { Value = item.Value, Text = Localizer[item.Text].Value })">
+                <option value="">-- @Localizer["Select Role"] --</option>
             </select>
             <span asp-validation-for="Role" class="text-danger"></span>
         </div>
         <div class="input">
-            <label asp-for="specialty">Specialty</label>
-            <input asp-for="specialty" placeholder="Enter specialty"/>
+            <label asp-for="specialty">@Localizer["Specialty"]</label>
+            <input asp-for="specialty" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Specialty"].Value}")"/>
         </div>
         <div class="input">
-            <label asp-for="email">Email</label>
-            <input asp-for="email" placeholder="Enter Email"/>
+            <label asp-for="email">@Localizer["Email"]</label>
+            <input asp-for="email" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Email"].Value}")"/>
         </div>
-        <button type="submit" class="button-Sign-In">Sign Up</button>
+        <button type="submit" class="button-Sign-In">@Localizer["Sign Up"]</button>
     </form>
 </div>
 </body>
