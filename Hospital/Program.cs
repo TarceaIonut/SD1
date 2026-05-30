@@ -54,7 +54,7 @@ builder.Services.AddControllersWithViews()
 var app = builder.Build();
 
 
-var supportedCultures = new[] { "en-US", "ro-RO" };
+var supportedCultures = new[] { "en-US", "ro-RO", "de-DE" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures)

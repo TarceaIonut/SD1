@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-Microslop-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+
+  <data name="Hospital"><value>Krankenhaus</value></data>
+  <data name="Home Page"><value>Startseite</value></data>
+
+  <data name="Name"><value>Name</value></data>
+  <data name="Email"><value>E-Mail</value></data>
+  <data name="Role"><value>Rolle</value></data>
+
+  <data name="Sign Out"><value>Abmelden</value></data>
+  <data name="Delete My Account"><value>Mein Konto löschen</value></data>
+
+  <data name="Sign In"><value>Anmelden</value></data>
+  <data name="Enter username"><value>Benutzername eingeben</value></data>
+  <data name="Enter message"><value>Nachricht eingeben</value></data>
+  <data name="Enter password"><value>Passwort eingeben</value></data>
+  
+  <data name="Sign Up"><value>Registrieren</value></data>
+  <data name="Admin"><value>Admin</value></data>
+  <data name="Patient"><value>Patient</value></data>
+  <data name="Doctor"><value>Arzt</value></data>
+  
+  <data name="Doctors"><value>Ärzte</value></data>
+  <data name="Accounts"><value>Konten</value></data>
+  <data name="ExportAccounts"><value>Konten exportieren</value></data>
+  <data name="Export"><value>Exportieren</value></data>
+  
+  <data name="Doctor Checkups"><value>Ärztliche Untersuchungen</value></data>
+  <data name="Doctor Checkups List"><value>Liste der ärztlichen Untersuchungen</value></data>
+  <data name="Select Role"><value>Rolle auswählen</value></data>
+  <data name="Select Role_Order"><value>Reihenfolge auswählen</value></data>
+  <data name="Sort"><value>Sortieren</value></data>
+  
+  <data name="Speciality"><value>Fachgebiet</value></data>
+  <data name="Username"><value>Benutzername</value></data>
+  <data name="Password"><value>Passwort</value></data>
+  <data name="User"><value>Benutzer</value></data>
+  
+  <data name="Doctor Name"><value>Name des Arztes</value></data>
+  <data name="Doctor Email"><value>E-Mail des Arztes</value></data>
+  <data name="Patient Name"><value>Name des Patienten</value></data>
+  <data name="Patient Email"><value>E-Mail des Patienten</value></data>
+  <data name="Appointment Date"><value>Termindatum</value></data>
+  <data name="Description"><value>Beschreibung</value></data>
+  <data name="Enter"><value>Eingeben</value></data>
+  <data name="New Checkup"><value>Neue Untersuchung</value></data>
+
+  <data name="Checkup Id"><value>Untersuchungs-ID</value></data>
+  <data name="sortOn"><value>Sortieren nach</value></data>
+  <data name="sort On"><value>Sortieren nach</value></data>
+  <data name="sortOrder"><value>Sortierreihenfolge</value></data>
+  <data name="sort Order"><value>Sortierreihenfolge</value></data>
+  <data name="Select Export Format"><value>Exportformat auswählen</value></data>
+  <data name="Select Sort Order"><value>Sortierreihenfolge auswählen</value></data>
+
+  <data name="Format"><value>Format</value></data>
+
+  <data name="Delete"><value>Löschen</value></data>
+  <data name="Update"><value>Aktualisieren</value></data>
+
+  <data name="Language"><value>Sprache (Language)</value></data>
+  <data name="Select Language"><value>Sprache auswählen</value></data>
+
+  <data name="Chat"><value>Chat</value></data>
+  <data name="Message"><value>Nachricht</value></data>
+  <data name="Message New Person"><value>Neuer Person eine Nachricht senden</value></data>
+  <data name="Message Person"><value>Person eine Nachricht senden</value></data>
+
+  <data name="Specialty"><value>Fachgebiet</value></data>
+  <data name="Select Field"><value>Feld auswählen</value></data>
+  <data name="Select Format"><value>Format auswählen</value></data>
+  <data name="Select Order"><value>Reihenfolge auswählen</value></data>
+
+  <data name="System Error: You are not signed in. Real-time chat is disabled."><value>Systemfehler: Sie sind nicht angemeldet. Echtzeit-Chat ist deaktiviert.</value></data>
+  <data name="Notice: No active chat partner selected. Please select an account to start messaging."><value>Hinweis: Kein aktiver Chat-Partner ausgewählt. Bitte wählen Sie ein Konto aus, um Nachrichten zu senden.</value></data>
+</root>

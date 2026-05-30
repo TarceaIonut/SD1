@@ -9,9 +9,9 @@ int? currentUserId = UserService.GetUserId();
 int? activeChatPartnerId = UserService.GetMessageUserId();
 
 if (currentUserId == null) {
-ViewData.ModelState.AddModelError("", "System Error: You are not signed in. Real-time chat is disabled.");
+ViewData.ModelState.AddModelError("", Localizer["System Error: You are not signed in. Real-time chat is disabled."].Value);
 }else if (activeChatPartnerId == null) {
-ViewData.ModelState.AddModelError("", "Notice: No active chat partner selected. Please select an account to start messaging.");
+ViewData.ModelState.AddModelError("", Localizer["Notice: No active chat partner selected. Please select an account to start messaging."].Value);
 }
 }
 <h1>@ViewData["Title"]</h1>

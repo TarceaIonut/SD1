@@ -23,6 +23,7 @@ public class LanguageController : Controller
         string friendlyName = currentCulture switch
         {
             "ro-RO" => "Română",
+            "de-DE" => "Deutsch",
             _ => "English"
         };
         return View("Language", new LanguageView{Language = friendlyName});
