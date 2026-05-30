@@ -1,24 +1,23 @@
-﻿@using Hospital.Models.ViewModels
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Hospital.Models.ViewModels
 @model Hospital.Models.ViewModels.AccountsViewModel
 
 @{
-    ViewData["Title"] = "Accounts";
+    ViewData["Title"] = Localizer["Accounts"];
 }
 
 <!DOCTYPE html>
 
 <h1>@ViewData["Title"]</h1>
 <div asp-validation-summary="All" class="text-danger"></div>
-<form asp-action="test_GRPC" asp-controller="Account" method="get">
-    <button type="submit" class="button-Sign-In">Test gRPC</button>
-</form>
 @if (Model.Show) {
     <table class="accounts table">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Email"]</th>
+            <th>@Localizer["Role"]</th>
         </tr>
         </thead>
         <tbody>
@@ -27,8 +26,8 @@
             @foreach (var p in Model._persons) {
                 <tr>
                     <td>@p.Username</td>
-                    <th>@p.Email </th>
-                    <td>@p.role.ToString()</td>
+                    <th>@p.Email</th>
+                    <td>@Localizer[p.role.ToString() ?? ""]</td>
                 </tr>
             }
         }
@@ -37,21 +36,21 @@
     </table>
     <form method="post">
         <div class="form-group">
-            <label asp-for="Format" class="control-label"></label>
+            <label asp-for="Format" class="control-label">@Localizer["Format"]</label>
             <select asp-for="Format" 
                     class="form-control" 
                     asp-items="Html.GetEnumSelectList<Hospital.Models.HelperStructures.Formats>()">
-                <option value="">-- Select Export Format --</option>
+                <option value="">-- @Localizer["Select Export Format"] --</option>
             </select>
             <span asp-validation-for="Format" class="text-danger"></span>
-            <label asp-for="SortOrder" class="control-label"></label>
+            <label asp-for="SortOrder" class="control-label">@Localizer["sortOrder"]</label>
             <select asp-for="SortOrder" 
                     class="form-control" 
                     asp-items="Html.GetEnumSelectList<DoctorCheckupsFunctions.SortOrder>()">
-                <option value="">-- Select Sort Order --</option>
+                <option value="">-- @Localizer["Select Sort Order"] --</option>
             </select>
             <span asp-validation-for="SortOrder" class="text-danger"></span>
-            <button type="submit" asp-controller="Account" asp-action="ExportAccounts">ExportAccounts</button>
+            <button type="submit" asp-controller="Account" asp-action="ExportAccounts">@Localizer["ExportAccounts"]</button>
         </div>
     </form>
 }

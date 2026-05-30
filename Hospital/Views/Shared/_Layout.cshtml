@@ -1,6 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Hospital";
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@{
+    ViewData["Title"] = Localizer["Hospital"];
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,47 +25,47 @@
             </button>
             <div class="d-none d-md-block mx-3 text-muted" style="font-size: 0.75rem; line-height: 1.1;">
                 <div class="row g-0">
-                    <div class="col-4 px-2">Name</div>
-                    <div class="col-4 px-2 border-start border-end">Email</div>
-                    <div class="col-4 px-2">Role</div>
+                    <div class="col-4 px-2">@Localizer["Name"]</div>
+                    <div class="col-4 px-2 border-start border-end">@Localizer["Email"]</div>
+                    <div class="col-4 px-2">@Localizer["Role"]</div>
                 </div>
                 <div class="row g-0">
                     <div class="col-4 px-2 text-dark">@Context.Session.GetString("UserName")</div>
                     <div class="col-4 px-2 text-dark border-start border-end">@Context.Session.GetString("UserEmail")</div>
-                    <div class="col-4 px-2 text-dark">@Context.Session.GetString("UserRole")</div>
+                    <div class="col-4 px-2 text-dark">@Localizer[Context.Session.GetString("UserRole") ?? ""]</div>
                 </div>
             </div>
             <form asp-controller="Account" asp-action="SignOut" method="post">
-                <button type="submit">Sign Out</button>
+                <button type="submit">@Localizer["Sign Out"]</button>
             </form>
             <form asp-controller="Account" asp-action="DeleteMyAccount" method="post">
-                <button type="submit">Delete My Account</button>
+                <button type="submit">@Localizer["Delete My Account"]</button>
             </form>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignIn">Sign In</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignIn">@Localizer["Sign In"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignUp">Sign Up</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignUp">@Localizer["Sign Up"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Doctors" asp-action="Doctors">Doctors</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Doctors" asp-action="Doctors">@Localizer["Doctors"] </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Accounts">Accounts</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Accounts">@Localizer["Accounts"] </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Functions" asp-action="DoctorCheckups">Doctor Checkups</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Functions" asp-action="DoctorCheckups">@Localizer["Doctor Checkups"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Functions" asp-action="DoctorCheckupList">Doctor Checkups List</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Functions" asp-action="DoctorCheckupList">@Localizer["Doctor Checkups List"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Chat">Chat</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Chat">@Localizer["Chat"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Language">Language</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Language" asp-action="Index">@Localizer["Language"]</a>
                     </li>
                 </ul>
             </div>
@@ -77,7 +80,7 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2026 - WebApplication2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2026 - WebApplication2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
     </div>
 </footer>
 <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js")"></script>
@@ -85,3 +88,4 @@
 <script src="@Url.Content("~/js/site.js")" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
+</html>

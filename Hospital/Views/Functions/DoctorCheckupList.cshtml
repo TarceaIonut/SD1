@@ -1,23 +1,27 @@
-﻿@model Hospital.Models.ViewModels.DoctorCheckupsFunctions
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Hospital.Models.ViewModels.DoctorCheckupsFunctions
 @{
-    ViewData["Title"] = "Doctor Checkup List";
+    ViewData["Title"] = Localizer["Doctor Checkup List"];
 }
 
 <!DOCTYPE html>
 
+<html lang="en">
+<body>
 <h1>@ViewData["Title"]</h1>
 <div asp-validation-summary="All" class="text-danger"></div>
 <table class="accounts table">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>Doctor Name</th>
-        <th>Doctor Email</th>
-        <th>Speciality</th>
-        <th>Patient Name</th>
-        <th>Patient Email</th>
-        <th>Appointment Date</th>
-        <th>Description</th>
+        <th>@Localizer["Id"]</th>
+        <th>@Localizer["Doctor Name"]</th>
+        <th>@Localizer["Doctor Email"]</th>
+        <th>@Localizer["Speciality"]</th>
+        <th>@Localizer["Patient Name"]</th>
+        <th>@Localizer["Patient Email"]</th>
+        <th>@Localizer["Appointment Date"]</th>
+        <th>@Localizer["Description"]</th>
         <th></th>
     </tr>
     </thead>
@@ -27,7 +31,7 @@
             <th>@c.Id</th>
             <td>@c.Doctor.Account?.Username</td>
             <th>@c.Doctor.Email</th>
-            <td>@c.Doctor.Specialty</td>
+            <td>@Localizer[c.Doctor.Specialty?.ToString() ?? ""]</td>
             <th>@c.Patient.Account?.Username</th>
             <th>@c.Patient.Email</th>
             <th>@c.AppointmentDate.ToString("f")</th>
@@ -36,58 +40,60 @@
     }
     </tbody>
 </table>
-@if (@Model.DoctorCheckups.Count > 0) {
-    if (@Context.Session.GetString("UserRole") != null &&
-        @Context.Session.GetString("UserRole")!.Equals("Patient") == false) {
+@if (Model.DoctorCheckups.Count > 0) {
+    if (Context.Session.GetString("UserRole") != null &&
+        Context.Session.GetString("UserRole")!.Equals("Patient") == false) {
         <form method="post">
             <div class="input">
-                <label asp-for="Id">Checkup Id</label>
-                <input asp-for="Id" placeholder="Enter Checkup Id"/>
+                <label asp-for="Id">@Localizer["Checkup Id"]</label>
+                <input asp-for="Id" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Checkup Id"].Value}")"/>
             </div>
             <div class="input">
-                <label asp-for="Description">Description</label>
-                <input asp-for="Description" placeholder="Enter Description" type="text"/>
+                <label asp-for="Description">@Localizer["Description"]</label>
+                <input asp-for="Description" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Description"].Value}")" type="text"/>
             </div>
             <div class="input">
-                <label asp-for="AppointmentDate">Appointment Date</label>
-                <input asp-for="AppointmentDate" placeholder="Enter DAppointment Date"/>
+                <label asp-for="AppointmentDate">@Localizer["Appointment Date"]</label>
+                <input asp-for="AppointmentDate" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Appointment Date"].Value}")"/>
             </div>
         
-            <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupDelete">Delete</button>
-            <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupUpdate">Update</button>
+            <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupDelete">@Localizer["Delete"]</button>
+            <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupUpdate">@Localizer["Update"]</button>
         </form>
     }
     <form method="post">
         <div class="form-group">
-            <label asp-for="sortOn" class="control-label"></label>
+            <label asp-for="sortOn" class="control-label">@Localizer["Sort On"]</label>
             <select asp-for="sortOn" 
                     class="form-control" 
-                    asp-items="Html.GetEnumSelectList<Hospital.Models.ViewModels.DoctorCheckupsFunctions.SortOn>()">
-                <option value="">-- Select Role --</option>
+                    asp-items="Html.GetEnumSelectList<Hospital.Models.ViewModels.DoctorCheckupsFunctions.SortOn>().Select(item => new SelectListItem { Value = item.Value, Text = Localizer[item.Text].Value })">
+                <option value="">-- @Localizer["Select Field"] --</option>
             </select>
             <span asp-validation-for="sortOn" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="sortOrder" class="control-label"></label>
+            <label asp-for="sortOrder" class="control-label">@Localizer["Sort Order"]</label>
             <select asp-for="sortOrder" 
                     class="form-control" 
-                    asp-items="Html.GetEnumSelectList<Hospital.Models.ViewModels.DoctorCheckupsFunctions.SortOrder>()">
-                <option value="">-- Select Role --</option>
+                    asp-items="Html.GetEnumSelectList<Hospital.Models.ViewModels.DoctorCheckupsFunctions.SortOrder>().Select(item => new SelectListItem { Value = item.Value, Text = Localizer[item.Text].Value })">
+                <option value="">-- @Localizer["Select Order"] --</option>
             </select>
             <span asp-validation-for="sortOrder" class="text-danger"></span>
         </div>
-        <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupSort">Sort</button>
+        <button type="submit" asp-controller="Functions" asp-action="DoctorCheckupSort">@Localizer["Sort"]</button>
     </form>
     <form method="post">
         <div class="form-group">
-            <label asp-for="Format" class="control-label"></label>
+            <label asp-for="Format" class="control-label">@Localizer["Format"]</label>
             <select asp-for="Format" 
                     class="form-control" 
-                    asp-items="Html.GetEnumSelectList<Hospital.Models.HelperStructures.Formats>()">
-                <option value="">-- Select Role --</option>
+                    asp-items="Html.GetEnumSelectList<Hospital.Models.HelperStructures.Formats>().Select(item => new SelectListItem { Value = item.Value, Text = Localizer[item.Text].Value })">
+                <option value="">-- @Localizer["Select Format"] --</option>
             </select>
             <span asp-validation-for="Format" class="text-danger"></span>
         </div>
-        <button type="submit" asp-controller="Functions" asp-action="Export">Export</button>
+        <button type="submit" asp-controller="Functions" asp-action="Export">@Localizer["Export"]</button>
     </form>
 }
+</body>
+</html>

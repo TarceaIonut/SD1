@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-Microslop-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+
+  <data name="Hospital"><value>Spital</value></data>
+  <data name="Home Page"><value>Pagina Principala</value></data>
+
+  
+
+  <data name="Name"><value>Nume</value></data>
+  <data name="Email"><value>Email</value></data>
+  <data name="Role"><value>Rol</value></data>
+
+  
+  <data name="Sign Out"><value>De Autentificare</value></data>
+  <data name="Delete My Account"><value>Sterge-mi Contul</value></data>
+
+  <data name="Sign In"><value>Autentificare</value></data>
+  <data name="Enter username"><value>Insereaza Numele</value></data>
+  <data name="Enter message"><value>Insereaza Mesajul</value></data>
+  <data name="Enter password"><value>Insereaza Parola</value></data>
+  
+  <data name="Sign Up"><value>Cont Nou</value></data>
+  <data name="Admin"><value>Admin</value></data>
+  <data name="Patient"><value>Pacient</value></data>
+  <data name="Doctor"><value>Doctor</value></data>
+  
+  
+  <data name="Doctors"><value>Doctori</value></data>
+  <data name="Accounts"><value>Conturi</value></data>
+  <data name="ExportAccounts"><value>Descarca Informati Despre Conturi</value></data>
+  <data name="Export"><value>Descarca</value></data>
+  
+  
+  <data name="Doctor Checkups"><value>Controale medicale</value></data>
+  <data name="Doctor Checkups List"><value>Lista de Controale medicale</value></data>
+  <data name="Select Role"><value>Selecteaza Rolul</value></data>
+  <data name="Select Role"><value>Selecteaza Ordinea</value></data>
+  <data name="Sort"><value>Sordeaza</value></data>
+  
+  
+  
+  <data name="Speciality"><value>Specializare</value></data>
+  <data name="Username"><value>Nume utilizator</value></data>
+  <data name="Password"><value>Parola</value></data>
+  <data name="Email"><value>Email</value></data>
+  <data name="User"><value>Utilizator</value></data>
+  
+  <data name="Doctor Name"><value>Numele Doctorului</value></data>
+  <data name="Doctor Email"><value>Email-ul Doctorului</value></data>
+  <data name="Patient Name"><value>Numele Pacientului</value></data>
+  <data name="Patient Email"><value>Email-ul Pacientului</value></data>
+  <data name="Appointment Date"><value>Data Controlului</value></data>
+  <data name="Description"><value>Descriptie</value></data>
+  <data name="Enter"><value>Insereaza</value></data>
+  <data name="New Checkup"><value>Control Nou</value></data>
+  
+
+  <data name="Checkup Id"><value>Id-ul Evaluary</value></data>
+  <data name="sortOn"><value>Sorteaza Pe</value></data>
+  <data name="sort On"><value>Sorteaza Pe</value></data>
+  <data name="sortOrder"><value>Ordine de sortare</value></data>
+  <data name="sort Order"><value>Ordine de sortare</value></data>
+  <data name="Select Export Format"><value>Selecteaza Formatil De Export</value></data>
+  <data name="Select Sort Order"><value>Selecteaza Ordinea de sortare</value></data>
+
+  
+  <data name="Format"><value>Format</value></data>
+
+  <data name="Delete"><value>Sterge</value></data>
+  <data name="Update"><value>Schimba</value></data>
+
+
+  <data name="Language"><value>Limba (Language)</value></data>
+  <data name="Select Language"><value>Selecteaza Limba</value></data>
+
+  <data name="Chat"><value>Chat(numa ca RO)</value></data>
+  <data name="Message"><value>Mesaj</value></data>
+  <data name="Message New Person"><value>Mesaj unei persoane noua</value></data>
+  <data name="Message Person"><value>Mesaj persoanei</value></data>
+
+  <data name="Specialty"><value>Specialitatea</value></data>
+  <data name="Select Field"><value>Selecteaza Campul</value></data>
+  <data name="Select Format"><value>Selecteaza Formatul</value></data>
+  <data name="Select Order"><value>Selecteaza Ordinea</value></data>
+
+  <data name="System Error: You are not signed in. Real-time chat is disabled."><value>Eroare de sistem: Nu sunteți conectat. Chatul în timp real este dezactivat.</value></data>
+  <data name="Notice: No active chat partner selected. Please select an account to start messaging."><value>Notificare: Nu ați selectat niciun partener de chat activ. Selectați un cont pentru a începe să trimiteți mesaje.</value></data>
+  
+
+  
+</root>

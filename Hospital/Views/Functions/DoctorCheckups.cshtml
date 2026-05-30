@@ -1,11 +1,15 @@
-﻿@model Hospital.Models.ViewModels.DoctorCheckupVewModel
+﻿@inject IHtmlLocalizer<SharedResource> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Hospital.Models.ViewModels.DoctorCheckupVewModel
 @{
-    ViewData["Title"] = "Checkups";
+    ViewData["Title"] = Localizer["Checkups"];
 }
 <!DOCTYPE html>
-
-<title>ViewData["Title"]</title>
-
+<html lang="en">
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
 
 <div class="container-fluid">
     <div class="row align-items-start">
@@ -13,18 +17,18 @@
             <table class="accounts table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Speciality</th>
+                    <th>@Localizer["Name"]</th>
+                    <th>@Localizer["Email"]</th>
+                    <th>@Localizer["Speciality"]</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var doctor in @Model.Doctors)
+                @foreach (var doctor in Model.Doctors)
                 {
                     <tr>
-                        <th>@doctor.Account?.Username</th>
-                        <th>@doctor.Email</th>
-                        <th>@doctor.Specialty</th>
+                        <td>@doctor.Account?.Username</td>
+                        <td>@doctor.Email</td>
+                        <td>@Localizer[doctor.Specialty?.ToString() ?? ""]</td>
                     </tr>
                 }
                 </tbody>
@@ -32,57 +36,56 @@
         </div>
         <div class="col-md-4 d-flex justify-content-center align-items-center mt-5 flex-column">
             <div asp-validation-summary="All" class="text-danger"></div>
-            @if (@Model.canSelect) { 
+            @if (Model.canSelect) { 
                 <form asp-controller="Functions" asp-action="DoctorCheckups" method="post">
-                    @if (@Model.canSelectDoctor) {
+                    @if (Model.canSelectDoctor) {
                         <div>
                             <div class="input">
-                                <label asp-for="DoctorName">Doctor Name</label>
-                                <input asp-for="DoctorName" placeholder="Enter Doctor Name"/>
+                                <label asp-for="DoctorName">@Localizer["Doctor Name"]</label>
+                                <input asp-for="DoctorName" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Doctor Name"].Value}")"/>
                             </div>
                             <div class="input">
-                                <label asp-for="DoctorEmail">Doctor Email</label>
-                                <input asp-for="DoctorEmail" placeholder="Enter Doctor Email"/>
+                                <label asp-for="DoctorEmail">@Localizer["Doctor Email"]</label>
+                                <input asp-for="DoctorEmail" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Doctor Email"].Value}")"/>
                             </div>
                         </div>
                     }
                     <div>
                         <div class="input">
-                            <label asp-for="PatientName">Patient Name</label>
-                            <input asp-for="PatientName" placeholder="Enter Patient Name"/>
+                            <label asp-for="PatientName">@Localizer["Patient Name"]</label>
+                            <input asp-for="PatientName" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Patient Name"].Value}")"/>
                         </div>
                         <div class="input">
-                            <label asp-for="PatientEmail">Patient Email</label>
-                            <input asp-for="PatientEmail" placeholder="Enter Patient Email"/>
+                            <label asp-for="PatientEmail">@Localizer["Patient Email"]</label>
+                            <input asp-for="PatientEmail" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Patient Email"].Value}")"/>
                         </div>
                         <div class="input">
-                            <label asp-for="AppointmentDate">Appointment Date</label>
-                            <input asp-for="AppointmentDate" placeholder="Enter Appointment Date"/>
+                            <label asp-for="AppointmentDate">@Localizer["Appointment Date"]</label>
+                            <input asp-for="AppointmentDate" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Appointment Date"].Value}")"/>
                         </div>
                         <div class="input">
-                            <label asp-for="Description">Description</label>
-                            <input asp-for="Description" placeholder="Enter Description"/>
+                            <label asp-for="Description">@Localizer["Description"]</label>
+                            <input asp-for="Description" placeholder="@($"{Localizer["Enter"].Value} {Localizer["Description"].Value}")"/>
                         </div>
                     </div>        
-                    <button type="submit">New Checkup</button>
+                    <button type="submit">@Localizer["New Checkup"]</button>
                 </form>
-                
             }
         </div>
         <div class="col-md-4">
             <table class="accounts table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
+                    <th>@Localizer["Name"]</th>
+                    <th>@Localizer["Email"]</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var patient in @Model.Patients)
+                @foreach (var patient in Model.Patients)
                 {
                     <tr>
-                        <th>@patient.Account?.Username</th>
-                        <th>@patient.Email</th>
+                        <td>@patient.Account?.Username</td>
+                        <td>@patient.Email</td>
                     </tr>
                 }
                 </tbody>
@@ -91,4 +94,5 @@
     </div>
 </div>
 
-<table></table>
+</body>
+</html>

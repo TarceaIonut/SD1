@@ -1,11 +1,8 @@
-
 using Hospital.Models;
 using Hospital.Service;
-
 using AccountDiffService;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddGrpcClient<AccountServiceRead.AccountServiceReadClient>(o => {
     o.Address = new Uri("http://localhost:5001");
@@ -32,9 +29,12 @@ builder.Services.AddGrpcClient<ChatWrite.ChatWriteClient>(o => {
     o.Address = new Uri("http://localhost:5004");
 });
 
-
-
 builder.Services.AddLogging();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<NotificationService>();
+builder.Services.AddSignalR();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -42,40 +42,24 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-builder.Services.AddControllersWithViews();
-builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<NotificationService>();
-builder.Services.AddSignalR();
-
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddLocalization(options => options.ResourcesPath = "SharedResources");
 
 builder.Services.AddControllersWithViews()
     .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
     .AddDataAnnotationsLocalization();
 
+
+
 var app = builder.Build();
 
-var supportedCultures = new[] { "en-US", "ro-RO" };
 
+var supportedCultures = new[] { "en-US", "ro-RO" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
 
-app.UseRequestLocalization(localizationOptions);
-
-
-
-app.MapHub<Hospital.Hubs.ChatHub>("/chatHub");
-
-app.Services.GetRequiredService<NotificationService>();
-
-app.UseSession();
-app.UseRouting();   
 
 if (!app.Environment.IsDevelopment())
 {
@@ -86,13 +70,22 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+
 app.UseRouting();
 
+app.UseRequestLocalization(localizationOptions);
+
+app.UseSession();
+
 app.UseAuthorization();
+
+app.MapHub<Hospital.Hubs.ChatHub>("/chatHub");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
 
+app.Services.GetRequiredService<NotificationService>();
+
+app.Run();
