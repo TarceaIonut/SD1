@@ -30,7 +30,10 @@ public class ChatServiceQuery(AccountServiceRead.AccountServiceReadClient _accou
         var responce = new GetChatsResponce();
         foreach (var message in l) {
             responce.Messages.Add(new ChatMessage
-                {Date = DateTime.SpecifyKind(message.Date, DateTimeKind.Utc).ToTimestamp(), Message =  message.Content});
+            {
+                Date = DateTime.SpecifyKind(message.Date, DateTimeKind.Utc).ToTimestamp(), Message =  message.Content,
+                ReceiverId = message.ReceiverId, SenderId =  message.SenderId
+            });
         }
         return Task.FromResult(responce);
     }

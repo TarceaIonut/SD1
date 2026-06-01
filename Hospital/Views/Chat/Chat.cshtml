@@ -60,13 +60,15 @@ ViewData.ModelState.AddModelError("", Localizer["Notice: No active chat partner 
         @if (activeChatPartnerId != null)
         {
         <div class="col-md-4">
-            <div id="messageContainer">
+            <div id="messageContainer" style="height: 400px; overflow-y: auto;">
                 @foreach (var messages in @Model.Messages)
                 {
-                <div class="mb-2 p-2 border rounded bg-light">
-                    <small class="text-muted d-block">@messages.Date.ToString()</small>
-                    <p class="mb-0">@messages.Message</p>
-                </div>
+                    <div class="mb-2 p-2 border rounded bg-light">
+                        <small class="text-muted d-block">
+                            <strong>@messages.SentBy</strong> • @messages.Date.ToString("g")
+                        </small>
+                        <p class="mb-0">@messages.Message</p>
+                    </div>
                 }
             </div>
 
@@ -93,13 +95,13 @@ ViewData.ModelState.AddModelError("", Localizer["Notice: No active chat partner 
     const currentUserId = parseInt("@(currentUserId ?? 0)");
     const activeChatPartnerId = parseInt("@(activeChatPartnerId ?? 0)");
 
-    connection.on("ReceiveMessage", function (senderId, message, dateString) {
+    connection.on("ReceiveMessage", function (senderId, senderName, message, dateString) {
         if (senderId === activeChatPartnerId || senderId === currentUserId) {
             const messageHtml = `
-                    <div class="mb-2 p-2 border rounded bg-light">
-                        <small class="text-muted d-block">${dateString}</small>
-                        <p class="mb-0">${message}</p>
-                    </div>`;
+                <div class="mb-2 p-2 border rounded bg-light">
+                    <small class="text-muted d-block"><strong>${senderName}</strong> • ${dateString}</small>
+                    <p class="mb-0">${message}</p>
+                </div>`;
 
             $("#messageContainer").append(messageHtml);
 
@@ -108,7 +110,7 @@ ViewData.ModelState.AddModelError("", Localizer["Notice: No active chat partner 
                 container.scrollTop = container.scrollHeight;
             }
         }
-    });
+});
 
     if (currentUserId > 0) {
         connection.start().then(function () {

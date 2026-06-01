@@ -17,7 +17,7 @@ public class ServiceCommand : AccountServiceWrite.AccountServiceWriteBase {
     public override Task<newAccountReply> newAccount(newAccountRequest r, ServerCallContext context) {
         Console.WriteLine("newAccount rcg command ");
         if (_repository.AccountExists(r.Username)) {
-            throw new RpcException(new Status(StatusCode.AlreadyExists, "Account already exists: password = " + r.Password));
+            throw new RpcException(new Status(StatusCode.AlreadyExists, "Account already exists"));
         }
         var replyExist = _personsClientRead.personExistsEmail(new PersonExistsEmailRequest{Email = r.Email});
         if (replyExist.Exists) {

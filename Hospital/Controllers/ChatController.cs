@@ -47,6 +47,7 @@ public class ChatController(
     {
         var v = new ChatView();
         int? userId = _userService.GetUserId();
+        string? userName = _userService.GetUser();
         if (userId == null)
         {
             ModelState.AddModelError("", "not signed in");
@@ -54,8 +55,11 @@ public class ChatController(
         }
         _userService.SetMessageUserId(id);
         var responce = _client.GetAllCurrentAccounts(new GetAllCurrentAccountsRequest { Id = userId.Value }).Accounts;
+        string messageSender = "unknown";
         foreach (var account in responce)
         {
+            if (account.Id == id)
+                messageSender =  account.Username;
             v.Accounts.Add(new AccountPrint
             {
                 Username = account.Username, Email = account.Email, Speciality = account.Speciality,
@@ -66,7 +70,8 @@ public class ChatController(
         var messages = _client.GetChats(new getChatsRequest { InitiatorId = userId.Value, ReceiverId = id }).Messages;
         foreach (var message in messages)
         {
-            v.Messages.Add(new ChatView.MessageView { Date = message.Date.ToDateTime(), Message = message.Message });
+            v.Messages.Add(new ChatView.MessageView { Date = message.Date.ToDateTime(), Message = message.Message, 
+                SentBy = message.SenderId == userId ? userName! : messageSender});
         }
         
         return View("Chat", v);
@@ -136,11 +141,16 @@ public class ChatController(
                     
                 });
             }
-            await _hubContext.Clients.Group(currentId.Value.ToString())
-                .SendAsync("ReceiveMessage", userId.Value, model.MessageCurrentUser, DateTime.Now.ToString("g"));
+            string? userName = _userService.GetUser(); 
+            if (userName == null) userName = "Unknown";
+
+            string timestamp = DateTime.Now.ToString("g");
             
+            await _hubContext.Clients.Group(currentId.Value.ToString())
+                .SendAsync("ReceiveMessage", userId.Value, userName, model.MessageCurrentUser, timestamp);
+
             await _hubContext.Clients.Group(userId.Value.ToString())
-                .SendAsync("ReceiveMessage", userId.Value, model.MessageCurrentUser, DateTime.Now.ToString("g"));
+                .SendAsync("ReceiveMessage", userId.Value, userName, model.MessageCurrentUser, timestamp);
         }catch (Exception e) {
             ModelState.AddModelError("", e.Message);
         }

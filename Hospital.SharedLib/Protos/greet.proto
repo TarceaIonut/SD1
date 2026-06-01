@@ -206,6 +206,8 @@ message getChatsRequest{
 message ChatMessage{
   string message = 1;
   google.protobuf.Timestamp date = 2;
+  int32 senderId = 3;
+  int32 receiverId = 4;
 }
 message GetChatsResponce{
   repeated ChatMessage messages = 1;

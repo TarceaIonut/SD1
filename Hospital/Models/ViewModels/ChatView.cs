@@ -6,7 +6,7 @@ public class ChatView {
     public class MessageView {
         public string Message { get; set; }
         public DateTime Date { get; set; }
-        public bool SetByUser { get; set; }
+        public string SentBy { get; set; } = "unknown";
     }
     public List<MessageView> Messages { get; set; } = new();
     public List<AccountPrint> Accounts { get; set; } = new();

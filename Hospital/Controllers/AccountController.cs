@@ -53,7 +53,7 @@ public class AccountController : Controller {
         var c = new GetAccountCommand(_accountRead);
         var p = c.ExecuteAsync(model);
         if (p.Result == null) {
-            ModelState.AddModelError("", "unknown error");
+            ModelState.AddModelError("", "Account Not Found");
         }else {
             _userService.SetUserId(p.Result.Id);
             _userService.SetUser(p.Result.Username);
